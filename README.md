@@ -3,7 +3,7 @@
 
 ## todo
 
-- [ ] port `JOML` to typescript - work in progress
+- [ ] port `System.Numerics` to typescript - work in progress
 - [ ] design abstract math types
 - [ ] make build system
 - [ ] make tests
