@@ -1,29 +1,35 @@
 import { Matrix3x2, Matrix3x2Array } from "./Matrix3x2";
 import { Matrix4x4, Matrix4x4Array } from "./Matrix4x4";
 import { Quaternion } from "./Quaternion";
+import { Immutable, ImmutConvertable } from "./types/Immutable";
+
+export interface ReadonlyVector2 {
+    readonly x: number;
+    readonly y: number;
+}
 
 /**
  * A structure encapsulating two double precision floating point values.
  */
-export class Vector2 {
+export class Vector2 implements ImmutConvertable<ReadonlyVector2> {
     // #region Public Static Properties
 
     /**
      * The vector (0,0).
      */
-    public static readonly zero = new Vector2(0, 0);
+    public static readonly zero: Immutable<Vector2> = new Vector2(0, 0).freeze();
     /**
      * The vector (1,1).
      */
-    public static readonly one = new Vector2(1, 1);
+    public static readonly one: Immutable<Vector2> = new Vector2(1, 1).freeze();
     /**
      * The vector (1,0).
      */
-    public static readonly unitX = new Vector2(1, 0);
+    public static readonly unitX: Immutable<Vector2> = new Vector2(1, 0).freeze();
     /**
      * The vector (0,1).
      */
-    public static readonly unitY = new Vector2(0, 1);
+    public static readonly unitY: Immutable<Vector2> = new Vector2(0, 1).freeze();
 
     // #endregion Public Static Properties
 
@@ -39,11 +45,18 @@ export class Vector2 {
     // #region Constructors
 
     /**
+     * Constructs a vector with (0,0) as its elements.
+     */
+    public constructor();
+
+    /**
      * Constructs a vector with the given individual elements.
      * @param x The X component.
      * @param y The Y component.
      */
-    public constructor(x: number, y: number) {
+    public constructor(x: number, y: number);
+
+    public constructor(x = 0, y = 0) {
         this.x = x;
         this.y = y;
     }
@@ -51,6 +64,13 @@ export class Vector2 {
     // #endregion Constructors
 
     // #region Public Instance methods
+
+    /**
+     * freezes the vector and returns it.
+     */
+    public freeze(): ReadonlyVector2 {
+        return Object.freeze(this);
+    }
 
     /**
      * Returns a String representing this Vector2 instance.
@@ -105,7 +125,7 @@ export class Vector2 {
      * @param value2 The second point.
      * @returns The distance.
      */
-    public static distance(value1: Vector2, value2: Vector2): number {
+    public static distance(value1: Immutable<Vector2>, value2: Immutable<Vector2>): number {
         const dx = value1.x - value2.x;
         const dy = value1.y - value2.y;
 
@@ -118,7 +138,7 @@ export class Vector2 {
      * @param value2 The second point.
      * @returns The distance squared.
      */
-    public static distanceSquared(value1: Vector2, value2: Vector2): number {
+    public static distanceSquared(value1: Immutable<Vector2>, value2: Vector2): number {
         const dx = value1.x - value2.x;
         const dy = value1.y - value2.y;
 
@@ -130,7 +150,7 @@ export class Vector2 {
      * @param value The vector to normalize.
      * @returns The normalized vector.
      */
-    public static normalize(value: Vector2): Vector2 {
+    public static normalize(value: Immutable<Vector2>): Vector2 {
         const ls = value.x * value.x + value.y * value.y;
         const invNorm = 1.0 / Math.sqrt(ls);
 
@@ -143,7 +163,7 @@ export class Vector2 {
      * @param normal The normal of the surface being reflected off.
      * @returns The reflected vector.
      */
-    public static reflect(vector: Vector2, normal: Vector2): Vector2 {
+    public static reflect(vector: Immutable<Vector2>, normal: Vector2): Vector2 {
         const dot = vector.x * normal.x + vector.y * normal.y;
         return new Vector2(
             vector.x - 2.0 * dot * normal.x,
@@ -158,7 +178,7 @@ export class Vector2 {
      * @param max The maximum value.
      * @returns The restricted vector.
      */
-    public static clamp(value1: Vector2, min: Vector2, max: Vector2): Vector2 {
+    public static clamp(value1: Immutable<Vector2>, min: Immutable<Vector2>, max: Immutable<Vector2>): Vector2 {
         // This compare order is very important!!!
         // We must follow HLSL behavior in the case user specified min value is bigger than max value.
         let x = value1.x;
@@ -179,7 +199,7 @@ export class Vector2 {
      * @param amount Value between 0 and 1 indicating the weight of the second source vector.
      * @returns The interpolated vector.
      */
-    public static lerp(value1: Vector2, value2: Vector2, amount: number): Vector2 {
+    public static lerp(value1: Immutable<Vector2>, value2: Immutable<Vector2>, amount: number): Vector2 {
         return new Vector2(
             value1.x + (value2.x - value1.x) * amount,
             value1.y + (value2.y - value1.y) * amount
@@ -192,7 +212,7 @@ export class Vector2 {
      * @param matrix The transformation matrix.
      * @returns The transformed vector.
      */
-    public static transform3x2Matrix(position: Vector2, matrix: Matrix3x2): Vector2 {
+    public static transform3x2Matrix(position: Immutable<Vector2>, matrix: Matrix3x2): Vector2 {
         const a = Matrix3x2Array.$fromMatrix3x2!(matrix);
         return new Vector2(
             position.x * a.$getM11!() + position.y * a.$getM21!() + a.$getM31!(),
@@ -205,7 +225,7 @@ export class Vector2 {
      * @param position The source vector.
      * @param matrix The transformation matrix.
      */
-    public static transform4x4Matrix(position: Vector2, matrix: Matrix4x4): Vector2 {
+    public static transform4x4Matrix(position: Immutable<Vector2>, matrix: Matrix4x4): Vector2 {
         const a = Matrix4x4Array.$fromMatrix4x4!(matrix);
         return new Vector2(
             position.x * a.$getM11!() + position.y * a.$getM21!() + a.$getM41!(),
@@ -219,7 +239,7 @@ export class Vector2 {
      * @param matrix The transformation matrix.
      * @returns The transformed vector.
      */
-    public static transformNormal3x2Matrix(normal: Vector2, matrix: Matrix3x2): Vector2 {
+    public static transformNormal3x2Matrix(normal: Immutable<Vector2>, matrix: Matrix3x2): Vector2 {
         const a = Matrix3x2Array.$fromMatrix3x2!(matrix);
         return new Vector2(
             normal.x * a.$getM11!() + normal.y * a.$getM21!(),
@@ -233,7 +253,7 @@ export class Vector2 {
      * @param matrix The transformation matrix.
      * @returns The transformed vector.
      */
-    public static transformNormal4x4Matrix(normal: Vector2, matrix: Matrix4x4): Vector2 {
+    public static transformNormal4x4Matrix(normal: Immutable<Vector2>, matrix: Matrix4x4): Vector2 {
         const a = Matrix4x4Array.$fromMatrix4x4!(matrix);
         return new Vector2(
             normal.x * a.$getM11!() + normal.y * a.$getM21!(),
@@ -247,7 +267,7 @@ export class Vector2 {
      * @param rotation The rotation to apply.
      * @returns The transformed vector.
      */
-    public static transformQuaternion(value: Vector2, rotation: Quaternion): Vector2 {
+    public static transformQuaternion(value: Immutable<Vector2>, rotation: Quaternion): Vector2 {
         const x2 = rotation.x + rotation.x;
         const y2 = rotation.y + rotation.y;
         const z2 = rotation.z + rotation.z;
@@ -270,7 +290,7 @@ export class Vector2 {
      * @param value2 The second vector.
      * @returns 
      */
-    public static dot(value1: Vector2, value2: Vector2): number {
+    public static dot(value1: Immutable<Vector2>, value2: Immutable<Vector2>): number {
         return value1.x * value2.x + value1.y * value2.y;
     }
 
@@ -280,7 +300,7 @@ export class Vector2 {
      * @param value2 The second source vector.
      * @returns The minimized vector.
      */
-    public static min(value1: Vector2, value2: Vector2): Vector2 {
+    public static min(value1: Immutable<Vector2>, value2: Immutable<Vector2>): Vector2 {
         return new Vector2(
             (value1.x < value2.x) ? value1.x : value2.x,
             (value1.y < value2.y) ? value1.y : value2.y);
@@ -292,7 +312,7 @@ export class Vector2 {
      * @param value2 The second source vector.
      * @returns The maximized vector.
      */
-    public static max(value1: Vector2, value2: Vector2): Vector2 {
+    public static max(value1: Immutable<Vector2>, value2: Immutable<Vector2>): Vector2 {
         return new Vector2(
             (value1.x > value2.x) ? value1.x : value2.x,
             (value1.y > value2.y) ? value1.y : value2.y);
@@ -303,7 +323,7 @@ export class Vector2 {
      * @param value The source vector.
      * @returns The absolute value vector.
      */
-    public static abs(value: Vector2): Vector2 {
+    public static abs(value: Immutable<Vector2>): Vector2 {
         return new Vector2(Math.abs(value.x), Math.abs(value.y));
     }
 
@@ -312,7 +332,7 @@ export class Vector2 {
      * @param value The source vector.
      * @returns The square root vector.
      */
-    public static sqrt(value: Vector2): Vector2 {
+    public static sqrt(value: Immutable<Vector2>): Vector2 {
         return new Vector2(Math.sqrt(value.x), Math.sqrt(value.y));
     }
     
@@ -322,7 +342,7 @@ export class Vector2 {
      * @param right The second source vector.
      * @returns The summed vector.
      */
-    public static add(left: Vector2, right: Vector2): Vector2 {
+    public static add(left: Immutable<Vector2>, right: Immutable<Vector2>): Vector2 {
         return new Vector2(left.x + right.x, left.y + right.y);
     }
 
@@ -332,7 +352,7 @@ export class Vector2 {
      * @param right The second source vector.
      * @returns The difference vector.
      */
-    public static sub(left: Vector2, right: Vector2): Vector2 {
+    public static sub(left: Immutable<Vector2>, right: Immutable<Vector2>): Vector2 {
         return new Vector2(left.x - right.x, left.y - right.y);
     }
 
@@ -342,7 +362,7 @@ export class Vector2 {
      * @param right The second source vector.
      * @returns The product vector.
      */
-    public static mul(left: Vector2, right: Vector2): Vector2 {
+    public static mul(left: Immutable<Vector2>, right: Immutable<Vector2>): Vector2 {
         return new Vector2(left.x * right.x, left.y * right.y);
     }
 
@@ -352,7 +372,7 @@ export class Vector2 {
      * @param right The scalar value.
      * @returns The scaled vector.
      */
-    public static mulScalar(left: Vector2, right: number): Vector2 {
+    public static mulScalar(left: Immutable<Vector2>, right: number): Vector2 {
         return new Vector2(left.x * right, left.y * right);
     }
 
@@ -362,7 +382,7 @@ export class Vector2 {
      * @param right The second source vector.
      * @returns The vector resulting from the division.
      */
-    public static div(left: Vector2, right: Vector2): Vector2 {
+    public static div(left: Immutable<Vector2>, right: Immutable<Vector2>): Vector2 {
         return new Vector2(left.x / right.x, left.y / right.y);
     }
 
@@ -372,7 +392,7 @@ export class Vector2 {
      * @param value2 The scalar value.
      * @returns The result of the division.
      */
-    public static divScalar(value1: Vector2, value2: number): Vector2 {
+    public static divScalar(value1: Immutable<Vector2>, value2: number): Vector2 {
         const invDiv = 1 / value2;
         return new Vector2(value1.x * invDiv, value1.y * invDiv);
     }
@@ -382,7 +402,7 @@ export class Vector2 {
      * @param value The source vector.
      * @returns The negated vector.
      */
-    public static negate(value: Vector2): Vector2 {
+    public static negate(value: Immutable<Vector2>): Vector2 {
         return new Vector2(-value.x, -value.y);
     }
 
@@ -392,7 +412,7 @@ export class Vector2 {
      * @param right The second vector to compare.
      * @returns True if the vectors are equal; False otherwise.
      */
-    public static equals(left: Vector2, right: Vector2): boolean {
+    public static equals(left: Immutable<Vector2>, right: Immutable<Vector2>): boolean {
         return left.x == right.x && left.y == right.y;
     }
 

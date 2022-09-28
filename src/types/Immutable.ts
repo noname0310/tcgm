@@ -16,7 +16,7 @@ interface DeepReadonlyArray<T> extends ReadonlyArray<DeepReadonly<T>> { }
 interface DeepReadonlyMap<K, V> extends ReadonlyMap<DeepReadonly<K>, DeepReadonly<V>> { }
 
 export type ImmutConvertable<T = any> = T & {
-    freeze(): T;
+    freeze(): Immutable<T>;
 };
 
 export type Immutable<T extends ImmutConvertable> = 
