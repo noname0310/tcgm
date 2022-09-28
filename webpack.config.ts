@@ -1,7 +1,8 @@
-const path = require("path");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const ESLintPlugin = require("eslint-webpack-plugin");
-const TsMacros = require("ts-macros").default;
+import path from "path";
+import HtmlWebpackPlugin from "html-webpack-plugin";
+import ESLintPlugin from "eslint-webpack-plugin";
+import TsMacros from "ts-macros";
+import { Program } from "typescript";
 
 module.exports = {
     entry: "./test/index.ts",
@@ -18,7 +19,7 @@ module.exports = {
                     compilerOptions: {
                         module: "esnext"
                     },
-                    getCustomTransformers: program => ({
+                    getCustomTransformers: (program: Program) => ({
                         before: [
                             TsMacros(program),
                         ]
@@ -40,7 +41,7 @@ module.exports = {
             template: "./test/index.html",
         }),
         new ESLintPlugin({
-            extensions: "ts",
+            extensions: ["ts"],
         })
     ],
     devServer: {
