@@ -1,3 +1,5 @@
+import { ImmutConvertable } from "./types/Immutable";
+
 export namespace Matrix3x2Array {
     export namespace Methods {
         export function $asData(array: Matrix3x2Array): Matrix3x2Tuple {
@@ -60,15 +62,22 @@ export namespace Matrix3x2Array {
     export function $fromTuple(tuple: Matrix3x2Tuple): Matrix3x2Array {
         return tuple as unknown as Matrix3x2Array;
     }
+
+    export function $fromReadonlyMatrix3x2(matrix: ReadonlyMatrix3x2): Matrix3x2Array {
+        return matrix.elements as unknown as Matrix3x2Array;
+    }
 }
 
-export interface Matrix3x2Array {
+export interface ReadonlyMatrix3x2Array {
     $getM11(): number;
     $getM12(): number;
     $getM21(): number;
     $getM22(): number;
     $getM31(): number;
     $getM32(): number;
+}
+
+export interface Matrix3x2Array extends ReadonlyMatrix3x2Array {
     $setM11(value: number): number;
     $setM12(value: number): number;
     $setM21(value: number): number;
@@ -82,10 +91,14 @@ export type Matrix3x2Tuple = [
     number, number, number
 ];
 
+export interface ReadonlyMatrix3x2 {
+    readonly elements: Readonly<Matrix3x2Tuple>;
+}
+
 /**
  * A structure encapsulating a 3x2 matrix.
  */
-export class Matrix3x2 {
+export class Matrix3x2 implements ImmutConvertable<ReadonlyMatrix3x2> {
     /**
      * The elements of the matrix in column-major order.
      * 
@@ -107,5 +120,10 @@ export class Matrix3x2 {
 
     public constructor() {
         this.elements = [1, 0, 0, 0, 1, 0];
+    }
+
+    public freeze(): ReadonlyMatrix3x2 {
+        Object.freeze(this.elements);
+        return Object.freeze(this);
     }
 }

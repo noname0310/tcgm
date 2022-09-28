@@ -142,7 +142,7 @@ export namespace Matrix4x4Array {
     }
 }
 
-export interface Matrix4x4Array {
+export interface ReadonlyMatrix4x4Array {
     $getM11(): number;
     $getM12(): number;
     $getM13(): number;
@@ -159,6 +159,9 @@ export interface Matrix4x4Array {
     $getM42(): number;
     $getM43(): number;
     $getM44(): number;
+}
+    
+export interface Matrix4x4Array extends ReadonlyMatrix4x4Array {
     $setM11(value: number): number;
     $setM12(value: number): number;
     $setM13(value: number): number;
@@ -179,6 +182,11 @@ export type Matrix4x4Tuple = [
     number, number, number, number,
     number, number, number, number
 ];
+
+export interface ReadonlyMatrix4x4 {
+    readonly elements: Readonly<Matrix4x4Tuple>;
+}
+
 
 /**
  * A structure encapsulating a 4x4 matrix.
@@ -212,5 +220,10 @@ export class Matrix4x4 {
             0, 0, 1, 0,
             0, 0, 0, 1
         ];
+    }
+
+    public freeze(): ReadonlyMatrix4x4 {
+        Object.freeze(this.elements);
+        return Object.freeze(this);
     }
 }

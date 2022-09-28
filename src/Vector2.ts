@@ -17,19 +17,19 @@ export class Vector2 implements ImmutConvertable<ReadonlyVector2> {
     /**
      * The vector (0,0).
      */
-    public static readonly zero: Immutable<Vector2> = new Vector2(0, 0).freeze();
+    public static readonly zero = new Vector2(0, 0).freeze();
     /**
      * The vector (1,1).
      */
-    public static readonly one: Immutable<Vector2> = new Vector2(1, 1).freeze();
+    public static readonly one = new Vector2(1, 1).freeze();
     /**
      * The vector (1,0).
      */
-    public static readonly unitX: Immutable<Vector2> = new Vector2(1, 0).freeze();
+    public static readonly unitX = new Vector2(1, 0).freeze();
     /**
      * The vector (0,1).
      */
-    public static readonly unitY: Immutable<Vector2> = new Vector2(0, 1).freeze();
+    public static readonly unitY = new Vector2(0, 1).freeze();
 
     // #endregion Public Static Properties
 
@@ -73,6 +73,25 @@ export class Vector2 implements ImmutConvertable<ReadonlyVector2> {
     }
 
     /**
+     * Copies the values of the passed Vector2's x and y properties to this Vector2. 
+     * @param value The source Vector2.
+     * @returns This Vector2 after the values have been copied.
+     */
+    public copy(value: Immutable<Vector2>): Vector2 {
+        this.x = value.x;
+        this.y = value.y;
+        return this;
+    }
+
+    /**
+     * Returns a new Vector2 with the same x and y values as this one. 
+     * @returns 
+     */
+    public clone(): Vector2 {
+        return new Vector2(this.x, this.y);
+    }
+
+    /**
      * Returns a String representing this Vector2 instance.
      * @returns The string representation.
      */
@@ -101,7 +120,7 @@ export class Vector2 implements ImmutConvertable<ReadonlyVector2> {
      * @param array The destination array.
      * @param index The index to start copying at.
      */
-    public copyTo(array: number[], index = 0): void {
+    public copyToArray(array: number[], index = 0): void {
         array[index] = this.x;
         array[index + 1] = this.y;
     }
@@ -120,154 +139,173 @@ export class Vector2 implements ImmutConvertable<ReadonlyVector2> {
     // #region Public Static Methods
 
     /**
-     * Returns the Euclidean distance between the two given points.
-     * @param value1 The first point.
-     * @param value2 The second point.
+     * Returns the Euclidean distance between this point and the other point.
+     * @param other The other point.
      * @returns The distance.
      */
-    public static distance(value1: Immutable<Vector2>, value2: Immutable<Vector2>): number {
-        const dx = value1.x - value2.x;
-        const dy = value1.y - value2.y;
+    public distanceTo(other: Immutable<Vector2>): number {
+        const dx = this.x - other.x;
+        const dy = this.y - other.y;
 
         return Math.sqrt(dx * dx + dy * dy);
     }
 
     /**
-     * Returns the Euclidean distance squared between the two given points.
-     * @param value1 The first point.
-     * @param value2 The second point.
+     * Returns the Euclidean distance squared between this point and the other point.
+     * @param other The other point.
      * @returns The distance squared.
      */
-    public static distanceSquared(value1: Immutable<Vector2>, value2: Vector2): number {
-        const dx = value1.x - value2.x;
-        const dy = value1.y - value2.y;
+    public distanceSquaredTo(other: Immutable<Vector2>): number {
+        const dx = this.x - other.x;
+        const dy = this.y - other.y;
 
         return dx * dx + dy * dy;
     }
 
     /**
-     * Returns a vector with the same direction as the given vector, but with a length of 1.
-     * @param value The vector to normalize.
-     * @returns The normalized vector.
+     * Converts this vector into a unit vector.
+     * @returns This vector after the normalization.
      */
-    public static normalize(value: Immutable<Vector2>): Vector2 {
-        const ls = value.x * value.x + value.y * value.y;
+    public normalize(): Vector2 {
+        const ls = this.x * this.x + this.y * this.y;
         const invNorm = 1.0 / Math.sqrt(ls);
 
-        return new Vector2(value.x * invNorm, value.y * invNorm);
+        this.x *= invNorm;
+        this.y *= invNorm;
+
+        return this;
     }
 
     /**
-     * Returns the reflection of a vector off a surface that has the specified normal.
+     * Set this vector into the reflection of the given vector around the given normal.
      * @param vector The source vector.
      * @param normal The normal of the surface being reflected off.
-     * @returns The reflected vector.
+     * @returns This vector after the reflection.
      */
-    public static reflect(vector: Immutable<Vector2>, normal: Vector2): Vector2 {
+    public reflect(vector: Immutable<Vector2>, normal: Immutable<Vector2>): Vector2 {
         const dot = vector.x * normal.x + vector.y * normal.y;
-        return new Vector2(
-            vector.x - 2.0 * dot * normal.x,
-            vector.y - 2.0 * dot * normal.y
-        );
+        this.x = vector.x - 2.0 * dot * normal.x;
+        this.y = vector.y - 2.0 * dot * normal.y;
+
+        return this;
     }
 
     /**
-     * Restricts a vector between a min and max value.
-     * @param value1 The source vector.
+     * Restricts this vector between a min and max value.
      * @param min The minimum value.
      * @param max The maximum value.
-     * @returns The restricted vector.
+     * @returns This vector after the restriction.
      */
-    public static clamp(value1: Immutable<Vector2>, min: Immutable<Vector2>, max: Immutable<Vector2>): Vector2 {
+    public clamp(min: Immutable<Vector2>, max: Immutable<Vector2>): Vector2 {
         // This compare order is very important!!!
         // We must follow HLSL behavior in the case user specified min value is bigger than max value.
-        let x = value1.x;
+        let x = this.x;
         x = (x > max.x) ? max.x : x;
         x = (x < min.x) ? min.x : x;
 
-        let y = value1.y;
+        let y = this.y;
         y = (y > max.y) ? max.y : y;
         y = (y < min.y) ? min.y : y;
 
-        return new Vector2(x, y);
+        this.x = x;
+        this.y = y;
+
+        return this;
     }
 
     /**
-     * Linearly interpolates between two vectors based on the given weighting.
+     * Set this vector to linearly interpolate between value1 and value2 by amount.
      * @param value1 The first source vector.
      * @param value2 The second source vector.
      * @param amount Value between 0 and 1 indicating the weight of the second source vector.
-     * @returns The interpolated vector.
+     * @returns This vector after the interpolation.
      */
-    public static lerp(value1: Immutable<Vector2>, value2: Immutable<Vector2>, amount: number): Vector2 {
-        return new Vector2(
-            value1.x + (value2.x - value1.x) * amount,
-            value1.y + (value2.y - value1.y) * amount
-        );
+    public lerpVectors(value1: Immutable<Vector2>, value2: Immutable<Vector2>, amount: number): Vector2 {
+        this.x = value1.x + (value2.x - value1.x) * amount;
+        this.y = value1.y + (value2.y - value1.y) * amount;
+
+        return this;
+    }
+    
+    /**
+     * Set this vector to linearly interpolate between this vector and the other vector by amount.
+     * @param other The other source vector.
+     * @param amount Value between 0 and 1 indicating the weight of the second source vector.
+     * @returns This vector after the interpolation.
+     */
+     public lerp(other: Immutable<Vector2>, amount: number): Vector2 {
+        this.x += (other.x - this.x) * amount;
+        this.y += (other.y - this.y) * amount;
+
+        return this;
     }
 
     /**
-     * Transforms a vector by the given 3x2 matrix.
-     * @param position The source vector.
+     * Transform this vector by the given 3x2 matrix.
      * @param matrix The transformation matrix.
-     * @returns The transformed vector.
+     * @returns This vector after the transformation.
      */
-    public static transform3x2Matrix(position: Immutable<Vector2>, matrix: Matrix3x2): Vector2 {
+    public transformFrom3x2Matrix(matrix: Matrix3x2): Vector2 {
         const a = Matrix3x2Array.$fromMatrix3x2!(matrix);
-        return new Vector2(
-            position.x * a.$getM11!() + position.y * a.$getM21!() + a.$getM31!(),
-            position.x * a.$getM12!() + position.y * a.$getM22!() + a.$getM32!()
-        );
+        const x = this.x;
+        const y = this.y;
+        this.x = x * a.$getM11!() + y * a.$getM21!() + a.$getM31!();
+        this.y = x * a.$getM12!() + y * a.$getM22!() + a.$getM32!();
+
+        return this;
     }
 
     /**
-     * Transforms a vector by the given 4x4 matrix.
-     * @param position The source vector.
+     * Transforms this vector by the given 4x4 matrix.
      * @param matrix The transformation matrix.
+     * @returns This vector after the transformation.
      */
-    public static transform4x4Matrix(position: Immutable<Vector2>, matrix: Matrix4x4): Vector2 {
+    public transformFrom4x4Matrix(matrix: Matrix4x4): Vector2 {
         const a = Matrix4x4Array.$fromMatrix4x4!(matrix);
-        return new Vector2(
-            position.x * a.$getM11!() + position.y * a.$getM21!() + a.$getM41!(),
-            position.x * a.$getM12!() + position.y * a.$getM22!() + a.$getM42!()
-        );
+        const x = this.x;
+        const y = this.y;
+        this.x = x * a.$getM11!() + y * a.$getM21!() + a.$getM41!();
+        this.y = x * a.$getM12!() + y * a.$getM22!() + a.$getM42!();
+
+        return this;
     }
 
     /**
-     * Transforms a vector normal by the given 3x2 matrix.
-     * @param normal The source vector.
+     * Transforms this vector normal by the given 3x2 matrix.
      * @param matrix The transformation matrix.
-     * @returns The transformed vector.
+     * @returns This vector after the transformation.
      */
-    public static transformNormal3x2Matrix(normal: Immutable<Vector2>, matrix: Matrix3x2): Vector2 {
+    public transformNormalFrom3x2Matrix(matrix: Matrix3x2): Vector2 {
         const a = Matrix3x2Array.$fromMatrix3x2!(matrix);
-        return new Vector2(
-            normal.x * a.$getM11!() + normal.y * a.$getM21!(),
-            normal.x * a.$getM12!() + normal.y * a.$getM22!()
-        );
+        const x = this.x;
+        const y = this.y;
+        this.x = x * a.$getM11!() + y * a.$getM21!();
+        this.y = x * a.$getM12!() + y * a.$getM22!();
+
+        return this;
     }
 
     /**
-     * Transforms a vector normal by the given 4x4 matrix.
-     * @param normal The source vector.
+     * Transforms this vector normal by the given 4x4 matrix.
      * @param matrix The transformation matrix.
-     * @returns The transformed vector.
+     * @returns This vector after the transformation.
      */
-    public static transformNormal4x4Matrix(normal: Immutable<Vector2>, matrix: Matrix4x4): Vector2 {
+    public transformNormalFrom4x4Matrix(matrix: Matrix4x4): Vector2 {
         const a = Matrix4x4Array.$fromMatrix4x4!(matrix);
-        return new Vector2(
-            normal.x * a.$getM11!() + normal.y * a.$getM21!(),
-            normal.x * a.$getM12!() + normal.y * a.$getM22!()
-        );
+        const x = this.x;
+        const y = this.y;
+        this.x = x * a.$getM11!() + y * a.$getM21!();
+        this.y = x * a.$getM12!() + y * a.$getM22!();
+
+        return this;
     }
 
     /**
-     * Transforms a vector by the given Quaternion rotation value.
-     * @param value The source vector to be rotated.
+     * Transforms this vector by the given Quaternion rotation value.
      * @param rotation The rotation to apply.
-     * @returns The transformed vector.
+     * @returns This vector after the transformation.
      */
-    public static transformQuaternion(value: Immutable<Vector2>, rotation: Quaternion): Vector2 {
+    public transformFromQuaternion(rotation: Immutable<Quaternion>): Vector2 {
         const x2 = rotation.x + rotation.x;
         const y2 = rotation.y + rotation.y;
         const z2 = rotation.z + rotation.z;
@@ -278,10 +316,13 @@ export class Vector2 implements ImmutConvertable<ReadonlyVector2> {
         const yy2 = rotation.y * y2;
         const zz2 = rotation.z * z2;
 
-        return new Vector2(
-            value.x * (1.0 - yy2 - zz2) + value.y * (xy2 - wz2),
-            value.x * (xy2 + wz2) + value.y * (1.0 - xx2 - zz2)
-        );
+        const x = this.x;
+        const y = this.y;
+
+        this.x = (x * (1.0 - yy2 - zz2)) + (y * (xy2 - wz2));
+        this.y = (x * (xy2 + wz2)) + (y * (1.0 - xx2 - zz2));
+
+        return this;
     }
 
     /**
