@@ -2,10 +2,80 @@ import { Matrix3x2, Matrix3x2Reader } from "./Matrix3x2";
 import { Matrix4x4, Matrix4x4Reader } from "./Matrix4x4";
 import { Quaternion } from "./Quaternion";
 import { Immutable, ImmutConvertable } from "./types/Immutable";
+import { XY } from "./VectorLike";
 
+/**
+ * readonly 2D vector
+ */
 export interface ReadonlyVector2 {
+    /**
+     * The X component of the vector.
+     */
     readonly x: number;
+
+    /**
+     * The Y component of the vector.
+     */
     readonly y: number;
+
+    /**
+     * Returns a new Vector2 with the same x and y values as this one. 
+     * @returns 
+     */
+    clone(): Vector2;
+
+    /**
+     * Returns a String representing this Vector2 instance.
+     * @returns The string representation.
+     */
+    toString(): string;
+
+    /**
+     * Returns the length of the vector.
+     * @returns The vector's length.
+     */
+    length(): number;
+
+    /**
+     * Returns the length of the vector squared. This operation is cheaper than Length().
+     * @returns The vector's length squared.
+     */
+    lengthSquared(): number;
+
+    /**
+     * Copies the contents of the vector into the given array, starting from the given index.
+     * @param array The destination array.
+     * @param index The index to start copying at.
+     */
+    copyToArray(array: number[], index?: number): void;
+
+    /**
+     * Returns a boolean indicating whether the given Vector2 is equal to this Vector2 instance.
+     * @param other The Vector2 to compare this instance to.
+     * @returns True if the other Vector2 is equal to this instance; False otherwise.
+     */
+    equals(other: ReadonlyVector2): boolean;
+
+    /**
+     * Returns the Euclidean distance between this point and the other point.
+     * @param other The other point.
+     * @returns The distance.
+     */
+    distanceTo(other: ReadonlyVector2): number;
+
+    /**
+     * Returns the Euclidean distance squared between this point and the other point.
+     * @param other The other point.
+     * @returns The distance squared.
+     */
+    distanceSquaredTo(other: ReadonlyVector2): number;
+    
+    /**
+     * Returns the dot product of this vector and the other vector.
+     * @param other The other vector.
+     * @returns The dot product.
+     */
+    dot(other: ReadonlyVector2): number;
 }
 
 /**
@@ -77,7 +147,7 @@ export class Vector2 implements ImmutConvertable<ReadonlyVector2> {
      * @param value The source Vector2.
      * @returns This Vector2 after the values have been copied.
      */
-    public copy(value: Immutable<Vector2>): Vector2 {
+    public copy(value: Immutable<XY>): Vector2 {
         this.x = value.x;
         this.y = value.y;
         return this;
@@ -130,7 +200,7 @@ export class Vector2 implements ImmutConvertable<ReadonlyVector2> {
      * @param other The Vector2 to compare this instance to.
      * @returns True if the other Vector2 is equal to this instance; False otherwise.
      */
-    public equals(other: Immutable<Vector2>): boolean {
+    public equals(other: ReadonlyVector2): boolean {
         return this.x == other.x && this.y == other.y;
     }
 
@@ -139,7 +209,7 @@ export class Vector2 implements ImmutConvertable<ReadonlyVector2> {
      * @param other The other point.
      * @returns The distance.
      */
-    public distanceTo(other: Immutable<Vector2>): number {
+    public distanceTo(other: ReadonlyVector2): number {
         const dx = this.x - other.x;
         const dy = this.y - other.y;
 
@@ -151,7 +221,7 @@ export class Vector2 implements ImmutConvertable<ReadonlyVector2> {
      * @param other The other point.
      * @returns The distance squared.
      */
-    public distanceSquaredTo(other: Immutable<Vector2>): number {
+    public distanceSquaredTo(other: ReadonlyVector2): number {
         const dx = this.x - other.x;
         const dy = this.y - other.y;
 
@@ -178,7 +248,7 @@ export class Vector2 implements ImmutConvertable<ReadonlyVector2> {
      * @param normal The normal of the surface being reflected off.
      * @returns This vector after the reflection.
      */
-    public reflect(vector: Immutable<Vector2>, normal: Immutable<Vector2>): Vector2 {
+    public reflect(vector: ReadonlyVector2, normal: ReadonlyVector2): Vector2 {
         const dot = vector.x * normal.x + vector.y * normal.y;
         this.x = vector.x - 2.0 * dot * normal.x;
         this.y = vector.y - 2.0 * dot * normal.y;
@@ -192,7 +262,7 @@ export class Vector2 implements ImmutConvertable<ReadonlyVector2> {
      * @param max The maximum value.
      * @returns This vector after the restriction.
      */
-    public clamp(min: Immutable<Vector2>, max: Immutable<Vector2>): Vector2 {
+    public clamp(min: ReadonlyVector2, max: ReadonlyVector2): Vector2 {
         // This compare order is very important!!!
         // We must follow HLSL behavior in the case user specified min value is bigger than max value.
         let x = this.x;
@@ -216,7 +286,7 @@ export class Vector2 implements ImmutConvertable<ReadonlyVector2> {
      * @param amount Value between 0 and 1 indicating the weight of the second source vector.
      * @returns This vector after the interpolation.
      */
-    public lerpVectors(value1: Immutable<Vector2>, value2: Immutable<Vector2>, amount: number): Vector2 {
+    public lerpVectors(value1: ReadonlyVector2, value2: ReadonlyVector2, amount: number): Vector2 {
         this.x = value1.x + (value2.x - value1.x) * amount;
         this.y = value1.y + (value2.y - value1.y) * amount;
 
@@ -229,7 +299,7 @@ export class Vector2 implements ImmutConvertable<ReadonlyVector2> {
      * @param amount Value between 0 and 1 indicating the weight of the second source vector.
      * @returns This vector after the interpolation.
      */
-     public lerp(other: Immutable<Vector2>, amount: number): Vector2 {
+     public lerp(other: ReadonlyVector2, amount: number): Vector2 {
         this.x += (other.x - this.x) * amount;
         this.y += (other.y - this.y) * amount;
 
@@ -326,7 +396,7 @@ export class Vector2 implements ImmutConvertable<ReadonlyVector2> {
      * @param other The other vector.
      * @returns The dot product.
      */
-    public dot(other: Immutable<Vector2>): number {
+    public dot(other: ReadonlyVector2): number {
         return this.x * other.x + this.y * other.y;
     }
 
@@ -336,7 +406,7 @@ export class Vector2 implements ImmutConvertable<ReadonlyVector2> {
      * @param value2 The second source vector.
      * @returns This vector after the min operation.
      */
-    public minVectors(value1: Immutable<Vector2>, value2: Immutable<Vector2>): Vector2 {
+    public minVectors(value1: ReadonlyVector2, value2: ReadonlyVector2): Vector2 {
         this.x = (value1.x < value2.x) ? value1.x : value2.x;
         this.y = (value1.y < value2.y) ? value1.y : value2.y;
 
@@ -348,7 +418,7 @@ export class Vector2 implements ImmutConvertable<ReadonlyVector2> {
      * @param other The other source vector.
      * @returns This vector after the min operation.
      */
-    public min(other: Immutable<Vector2>): Vector2 {
+    public min(other: ReadonlyVector2): Vector2 {
         this.x = (this.x < other.x) ? this.x : other.x;
         this.y = (this.y < other.y) ? this.y : other.y;
 
@@ -361,7 +431,7 @@ export class Vector2 implements ImmutConvertable<ReadonlyVector2> {
      * @param value2 The second source vector.
      * @returns This vector after the max operation.
      */
-    public maxVectors(value1: Immutable<Vector2>, value2: Immutable<Vector2>): Vector2 {
+    public maxVectors(value1: ReadonlyVector2, value2: ReadonlyVector2): Vector2 {
         this.x = (value1.x > value2.x) ? value1.x : value2.x;
         this.y = (value1.y > value2.y) ? value1.y : value2.y;
 
@@ -373,7 +443,7 @@ export class Vector2 implements ImmutConvertable<ReadonlyVector2> {
      * @param other The other source vector.
      * @returns This vector after max operation.
      */
-    public max(other: Immutable<Vector2>): Vector2 {
+    public max(other: ReadonlyVector2): Vector2 {
         this.x = (this.x > other.x) ? this.x : other.x;
         this.y = (this.y > other.y) ? this.y : other.y;
 
@@ -408,7 +478,7 @@ export class Vector2 implements ImmutConvertable<ReadonlyVector2> {
      * @param right The second source vector.
      * @returns This vector after the addition operation.
      */
-    public addVectors(left: Immutable<Vector2>, right: Immutable<Vector2>): Vector2 {
+    public addVectors(left: ReadonlyVector2, right: ReadonlyVector2): Vector2 {
         this.x = left.x + right.x;
         this.y = left.y + right.y;
 
@@ -420,7 +490,7 @@ export class Vector2 implements ImmutConvertable<ReadonlyVector2> {
      * @param other The other vector.
      * @returns This vector after the addition operation.
      */
-    public add(other: Immutable<Vector2>): Vector2 {
+    public add(other: ReadonlyVector2): Vector2 {
         this.x += other.x;
         this.y += other.y;
 
@@ -433,7 +503,7 @@ export class Vector2 implements ImmutConvertable<ReadonlyVector2> {
      * @param right The second source vector.
      * @returns This vector after the subtraction operation.
      */
-    public subVectors(left: Immutable<Vector2>, right: Immutable<Vector2>): Vector2 {
+    public subVectors(left: ReadonlyVector2, right: ReadonlyVector2): Vector2 {
         this.x = left.x - right.x;
         this.y = left.y - right.y;
 
@@ -445,7 +515,7 @@ export class Vector2 implements ImmutConvertable<ReadonlyVector2> {
      * @param other The other vector.
      * @returns This vector after the subtraction operation.
      */
-    public sub(other: Immutable<Vector2>): Vector2 {
+    public sub(other: ReadonlyVector2): Vector2 {
         this.x -= other.x;
         this.y -= other.y;
 
@@ -458,7 +528,7 @@ export class Vector2 implements ImmutConvertable<ReadonlyVector2> {
      * @param right The second source vector.
      * @returns This vector after the multiplication operation.
      */
-    public mulVectors(left: Immutable<Vector2>, right: Immutable<Vector2>): Vector2 {
+    public mulVectors(left: ReadonlyVector2, right: ReadonlyVector2): Vector2 {
         this.x = left.x * right.x;
         this.y = left.y * right.y;
 
@@ -470,7 +540,7 @@ export class Vector2 implements ImmutConvertable<ReadonlyVector2> {
      * @param other The other vector.
      * @returns This vector after the multiplication operation.
      */
-    public mul(other: Immutable<Vector2>): Vector2 {
+    public mul(other: ReadonlyVector2): Vector2 {
         this.x *= other.x;
         this.y *= other.y;
 
@@ -495,7 +565,7 @@ export class Vector2 implements ImmutConvertable<ReadonlyVector2> {
      * @param right The second source vector.
      * @returns This vector after the division operation.
      */
-    public divVectors(left: Immutable<Vector2>, right: Immutable<Vector2>): Vector2 {
+    public divVectors(left: ReadonlyVector2, right: ReadonlyVector2): Vector2 {
         this.x = left.x / right.x;
         this.y = left.y / right.y;
 
@@ -507,7 +577,7 @@ export class Vector2 implements ImmutConvertable<ReadonlyVector2> {
      * @param other The other vector.
      * @returns This vector after the division operation.
      */
-    public div(other: Immutable<Vector2>): Vector2 {
+    public div(other: ReadonlyVector2): Vector2 {
         this.x /= other.x;
         this.y /= other.y;
 
