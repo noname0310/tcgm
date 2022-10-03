@@ -1,5 +1,5 @@
-import { Matrix3x2, Matrix3x2Array } from "./Matrix3x2";
-import { Matrix4x4, Matrix4x4Array } from "./Matrix4x4";
+import { Matrix3x2, Matrix3x2Reader } from "./Matrix3x2";
+import { Matrix4x4, Matrix4x4Reader } from "./Matrix4x4";
 import { Quaternion } from "./Quaternion";
 import { Immutable, ImmutConvertable } from "./types/Immutable";
 
@@ -245,12 +245,12 @@ export class Vector2 implements ImmutConvertable<ReadonlyVector2> {
      * @param matrix The transformation matrix.
      * @returns This vector after the transformation.
      */
-    public transformFrom3x2Matrix(matrix: Matrix3x2): Vector2 {
-        const a = Matrix3x2Array.$fromMatrix3x2!(matrix);
+    public transformFrom3x2Matrix(matrix: Immutable<Matrix3x2>): Vector2 {
+        const reader = Matrix3x2Reader.$fromTuple!(matrix.elements);
         const x = this.x;
         const y = this.y;
-        this.x = x * a.$getM11!() + y * a.$getM21!() + a.$getM31!();
-        this.y = x * a.$getM12!() + y * a.$getM22!() + a.$getM32!();
+        this.x = x * reader.$m11!() + y * reader.$m21!() + reader.$m31!();
+        this.y = x * reader.$m12!() + y * reader.$m22!() + reader.$m32!();
 
         return this;
     }
@@ -260,12 +260,12 @@ export class Vector2 implements ImmutConvertable<ReadonlyVector2> {
      * @param matrix The transformation matrix.
      * @returns This vector after the transformation.
      */
-    public transformFrom4x4Matrix(matrix: Matrix4x4): Vector2 {
-        const a = Matrix4x4Array.$fromMatrix4x4!(matrix);
+    public transformFrom4x4Matrix(matrix: Immutable<Matrix4x4>): Vector2 {
+        const reader = Matrix4x4Reader.$fromTuple!(matrix.elements);
         const x = this.x;
         const y = this.y;
-        this.x = x * a.$getM11!() + y * a.$getM21!() + a.$getM41!();
-        this.y = x * a.$getM12!() + y * a.$getM22!() + a.$getM42!();
+        this.x = x * reader.$m11!() + y * reader.$m21!() + reader.$m41!();
+        this.y = x * reader.$m12!() + y * reader.$m22!() + reader.$m42!();
 
         return this;
     }
@@ -275,12 +275,12 @@ export class Vector2 implements ImmutConvertable<ReadonlyVector2> {
      * @param matrix The transformation matrix.
      * @returns This vector after the transformation.
      */
-    public transformNormalFrom3x2Matrix(matrix: Matrix3x2): Vector2 {
-        const a = Matrix3x2Array.$fromMatrix3x2!(matrix);
+    public transformNormalFrom3x2Matrix(matrix: Immutable<Matrix3x2>): Vector2 {
+        const reader = Matrix3x2Reader.$fromTuple!(matrix.elements);
         const x = this.x;
         const y = this.y;
-        this.x = x * a.$getM11!() + y * a.$getM21!();
-        this.y = x * a.$getM12!() + y * a.$getM22!();
+        this.x = x * reader.$m11!() + y * reader.$m21!();
+        this.y = x * reader.$m12!() + y * reader.$m22!();
 
         return this;
     }
@@ -290,12 +290,12 @@ export class Vector2 implements ImmutConvertable<ReadonlyVector2> {
      * @param matrix The transformation matrix.
      * @returns This vector after the transformation.
      */
-    public transformNormalFrom4x4Matrix(matrix: Matrix4x4): Vector2 {
-        const a = Matrix4x4Array.$fromMatrix4x4!(matrix);
+    public transformNormalFrom4x4Matrix(matrix: Immutable<Matrix4x4>): Vector2 {
+        const reader = Matrix4x4Reader.$fromTuple!(matrix.elements);
         const x = this.x;
         const y = this.y;
-        this.x = x * a.$getM11!() + y * a.$getM21!();
-        this.y = x * a.$getM12!() + y * a.$getM22!();
+        this.x = x * reader.$m11!() + y * reader.$m21!();
+        this.y = x * reader.$m12!() + y * reader.$m22!();
 
         return this;
     }

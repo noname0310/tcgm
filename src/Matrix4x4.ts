@@ -1,257 +1,193 @@
-export namespace Matrix4x4Array {
-    export namespace Methods {
-        export function $asData(array: Matrix4x4Array): Matrix4x4Tuple;
-
-        export function $asData(array: ReadonlyMatrix4x4Array): Readonly<Matrix4x4Tuple>;
-
-        export function $asData(array: Matrix4x4Array|ReadonlyMatrix4x4Array): Matrix4x4Tuple|Readonly<Matrix4x4Tuple> {
-            return array as unknown as Matrix4x4Tuple|Readonly<Matrix4x4Tuple>;
-        }
-
-        export function $getM11(array: Matrix4x4Array): number;
-
-        export function $getM11(array: ReadonlyMatrix4x4Array): number;
-
-        export function $getM11(array: Matrix4x4Array|ReadonlyMatrix4x4Array): number {
-            return $asData!(array)[0];
-        }
-
-        export function $getM12(array: Matrix4x4Array): number;
-
-        export function $getM12(array: ReadonlyMatrix4x4Array): number;
-
-        export function $getM12(array: Matrix4x4Array|ReadonlyMatrix4x4Array): number {
-            return $asData!(array)[4];
-        }
-
-        export function $getM13(array: Matrix4x4Array): number;
-
-        export function $getM13(array: ReadonlyMatrix4x4Array): number;
-
-        export function $getM13(array: Matrix4x4Array|ReadonlyMatrix4x4Array): number {
-            return $asData!(array)[8];
-        }
-
-        export function $getM14(array: Matrix4x4Array): number;
-
-        export function $getM14(array: ReadonlyMatrix4x4Array): number;
-
-        export function $getM14(array: Matrix4x4Array|ReadonlyMatrix4x4Array): number {
-            return $asData!(array)[12];
-        }
-
-        export function $getM21(array: Matrix4x4Array): number;
-
-        export function $getM21(array: ReadonlyMatrix4x4Array): number;
-
-        export function $getM21(array: Matrix4x4Array|ReadonlyMatrix4x4Array): number {
-            return $asData!(array)[1];
-        }
-
-        export function $getM22(array: Matrix4x4Array): number;
-
-        export function $getM22(array: ReadonlyMatrix4x4Array): number;
-
-        export function $getM22(array: Matrix4x4Array|ReadonlyMatrix4x4Array): number {
-            return $asData!(array)[5];
-        }
-
-        export function $getM23(array: Matrix4x4Array): number;
-
-        export function $getM23(array: ReadonlyMatrix4x4Array): number;
-
-        export function $getM23(array: Matrix4x4Array|ReadonlyMatrix4x4Array): number {
-            return $asData!(array)[9];
-        }
-
-        export function $getM24(array: Matrix4x4Array): number;
-
-        export function $getM24(array: ReadonlyMatrix4x4Array): number;
-
-        export function $getM24(array: Matrix4x4Array|ReadonlyMatrix4x4Array): number {
-            return $asData!(array)[13];
-        }
-
-        export function $getM31(array: Matrix4x4Array): number;
-
-        export function $getM31(array: ReadonlyMatrix4x4Array): number;
-
-        export function $getM31(array: Matrix4x4Array|ReadonlyMatrix4x4Array): number {
-            return $asData!(array)[2];
-        }
-
-        export function $getM32(array: Matrix4x4Array): number;
-
-        export function $getM32(array: ReadonlyMatrix4x4Array): number;
-
-        export function $getM32(array: Matrix4x4Array|ReadonlyMatrix4x4Array): number {
-            return $asData!(array)[6];
-        }
-
-        export function $getM33(array: Matrix4x4Array): number;
-
-        export function $getM33(array: ReadonlyMatrix4x4Array): number;
-
-        export function $getM33(array: Matrix4x4Array|ReadonlyMatrix4x4Array): number {
-            return $asData!(array)[10];
-        }
-
-        export function $getM34(array: Matrix4x4Array): number;
-
-        export function $getM34(array: ReadonlyMatrix4x4Array): number;
-
-        export function $getM34(array: Matrix4x4Array|ReadonlyMatrix4x4Array): number {
-            return $asData!(array)[14];
-        }
-
-        export function $getM41(array: Matrix4x4Array): number;
-
-        export function $getM41(array: ReadonlyMatrix4x4Array): number;
-
-        export function $getM41(array: Matrix4x4Array|ReadonlyMatrix4x4Array): number {
-            return $asData!(array)[3];
-        }
-
-        export function $getM42(array: Matrix4x4Array): number;
-
-        export function $getM42(array: ReadonlyMatrix4x4Array): number;
-
-        export function $getM42(array: Matrix4x4Array|ReadonlyMatrix4x4Array): number {
-            return $asData!(array)[7];
-        }
-
-        export function $getM43(array: Matrix4x4Array): number;
-
-        export function $getM43(array: ReadonlyMatrix4x4Array): number;
-
-        export function $getM43(array: Matrix4x4Array|ReadonlyMatrix4x4Array): number {
-            return $asData!(array)[11];
-        }
-
-        export function $getM44(array: Matrix4x4Array): number;
-
-        export function $getM44(array: ReadonlyMatrix4x4Array): number;
-
-        export function $getM44(array: Matrix4x4Array|ReadonlyMatrix4x4Array): number {
-            return $asData!(array)[15];
-        }
-
-        export function $setM11(array: Matrix4x4Array, value: number): number {
-            return $asData!(array)[0] = value;
-        }
-
-        export function $setM12(array: Matrix4x4Array, value: number): number {
-            return $asData!(array)[4] = value;
-        }
-
-        export function $setM13(array: Matrix4x4Array, value: number): number {
-            return $asData!(array)[8] = value;
-        }
-
-        export function $setM14(array: Matrix4x4Array, value: number): number {
-            return $asData!(array)[12] = value;
-        }
-
-        export function $setM21(array: Matrix4x4Array, value: number): number {
-            return $asData!(array)[1] = value;
-        }
-
-        export function $setM22(array: Matrix4x4Array, value: number): number {
-            return $asData!(array)[5] = value;
-        }
-
-        export function $setM23(array: Matrix4x4Array, value: number): number {
-            return $asData!(array)[9] = value;
-        }
-
-        export function $setM24(array: Matrix4x4Array, value: number): number {
-            return $asData!(array)[13] = value;
-        }
-
-        export function $setM31(array: Matrix4x4Array, value: number): number {
-            return $asData!(array)[2] = value;
-        }
-
-        export function $setM32(array: Matrix4x4Array, value: number): number {
-            return $asData!(array)[6] = value;
-        }
-
-        export function $setM33(array: Matrix4x4Array, value: number): number {
-            return $asData!(array)[10] = value;
-        }
-
-        export function $setM34(array: Matrix4x4Array, value: number): number {
-            return $asData!(array)[14] = value;
-        }
-
-        export function $setM41(array: Matrix4x4Array, value: number): number {
-            return $asData!(array)[3] = value;
-        }
-
-        export function $setM42(array: Matrix4x4Array, value: number): number {
-            return $asData!(array)[7] = value;
-        }
-
-        export function $setM43(array: Matrix4x4Array, value: number): number {
-            return $asData!(array)[11] = value;
-        }
-
-        export function $setM44(array: Matrix4x4Array, value: number): number {
-            return $asData!(array)[15] = value;
-        }
-    }
-
-    export function $fromMatrix4x4(matrix: Matrix4x4): Matrix4x4Array;
-
-    export function $fromMatrix4x4(matrix: ReadonlyMatrix4x4): ReadonlyMatrix4x4Array;
-
-    export function $fromMatrix4x4(matrix: Matrix4x4|ReadonlyMatrix4x4): Matrix4x4Array|ReadonlyMatrix4x4Array {
-        return matrix.elements as unknown as Matrix4x4Array|ReadonlyMatrix4x4Array;
-    }
-
-    export function $fromMatrix4x4Tuple(array: Matrix4x4Tuple): Matrix4x4Array;
-
-    export function $fromMatrix4x4Tuple(array: Readonly<Matrix4x4Tuple>): ReadonlyMatrix4x4Array;
-
-    export function $fromMatrix4x4Tuple(array: Matrix4x4Tuple|Readonly<Matrix4x4Tuple>): Matrix4x4Array|ReadonlyMatrix4x4Array {
-        return array as unknown as Matrix4x4Array|ReadonlyMatrix4x4Array;
-    }
+export interface Matrix4x4Reader {
+    _type: "Matrix4x4Reader";
+    $m11(): number;
+    $m12(): number;
+    $m13(): number;
+    $m14(): number;
+    $m21(): number;
+    $m22(): number;
+    $m23(): number;
+    $m24(): number;
+    $m31(): number;
+    $m32(): number;
+    $m33(): number;
+    $m34(): number;
+    $m41(): number;
+    $m42(): number;
+    $m43(): number;
+    $m44(): number;
 }
 
-export interface ReadonlyMatrix4x4Array {
-    _type: ReadonlyMatrix4x4Array;
-    $getM11(): number;
-    $getM12(): number;
-    $getM13(): number;
-    $getM14(): number;
-    $getM21(): number;
-    $getM22(): number;
-    $getM23(): number;
-    $getM24(): number;
-    $getM31(): number;
-    $getM32(): number;
-    $getM33(): number;
-    $getM34(): number;
-    $getM41(): number;
-    $getM42(): number;
-    $getM43(): number;
-    $getM44(): number;
+export namespace Matrix4x4Reader {
+    export namespace Methods {
+        export function $asData(self: Matrix4x4Reader): Readonly<Matrix4x4Tuple> {
+            return self as unknown as Readonly<Matrix4x4Tuple>;
+        }
+
+        export function $m11(self: Matrix4x4Reader): number {
+            return $asData!(self)[0];
+        }
+
+        export function $m12(self: Matrix4x4Reader): number {
+            return $asData!(self)[4];
+        }
+
+        export function $m13(self: Matrix4x4Reader): number {
+            return $asData!(self)[8];
+        }
+
+        export function $m14(self: Matrix4x4Reader): number {
+            return $asData!(self)[12];
+        }
+
+        export function $m21(self: Matrix4x4Reader): number {
+            return $asData!(self)[1];
+        }
+
+        export function $m22(self: Matrix4x4Reader): number {
+            return $asData!(self)[5];
+        }
+
+        export function $m23(self: Matrix4x4Reader): number {
+            return $asData!(self)[9];
+        }
+
+        export function $m24(self: Matrix4x4Reader): number {
+            return $asData!(self)[13];
+        }
+
+        export function $m31(self: Matrix4x4Reader): number {
+            return $asData!(self)[2];
+        }
+
+        export function $m32(self: Matrix4x4Reader): number {
+            return $asData!(self)[6];
+        }
+
+        export function $m33(self: Matrix4x4Reader): number {
+            return $asData!(self)[10];
+        }
+
+        export function $m34(self: Matrix4x4Reader): number {
+            return $asData!(self)[14];
+        }
+
+        export function $m41(self: Matrix4x4Reader): number {
+            return $asData!(self)[3];
+        }
+
+        export function $m42(self: Matrix4x4Reader): number {
+            return $asData!(self)[7];
+        }
+
+        export function $m43(self: Matrix4x4Reader): number {
+            return $asData!(self)[11];
+        }
+
+        export function $m44(self: Matrix4x4Reader): number {
+            return $asData!(self)[15];
+        }
+    }
+
+    export function $fromTuple(tuple: Readonly<Matrix4x4Tuple>): Matrix4x4Reader {
+        return tuple as unknown as Matrix4x4Reader;
+    }
 }
     
-export interface Matrix4x4Array extends ReadonlyMatrix4x4Array {
-    _type: Matrix4x4Array;
-    $setM11(value: number): number;
-    $setM12(value: number): number;
-    $setM13(value: number): number;
-    $setM14(value: number): number;
-    $setM21(value: number): number;
-    $setM22(value: number): number;
-    $setM23(value: number): number;
-    $setM24(value: number): number;
-    $setM31(value: number): number;
-    $setM32(value: number): number;
-    $setM33(value: number): number;
-    $setM34(value: number): number;
+export interface Matrix4x4Writer {
+    _type: "Matrix4x4Writer";
+    $m11(value: number): number;
+    $m12(value: number): number;
+    $m13(value: number): number;
+    $m14(value: number): number;
+    $m21(value: number): number;
+    $m22(value: number): number;
+    $m23(value: number): number;
+    $m24(value: number): number;
+    $m31(value: number): number;
+    $m32(value: number): number;
+    $m33(value: number): number;
+    $m34(value: number): number;
+    $m41(value: number): number;
+    $m42(value: number): number;
+    $m43(value: number): number;
+    $m44(value: number): number;
+}
+
+export namespace Matrix4x4Writer {
+    export namespace Methods {
+        export function $asData(self: Matrix4x4Writer): Matrix4x4Tuple {
+            return self as unknown as Matrix4x4Tuple;
+        }
+
+        export function $m11(self: Matrix4x4Writer, value: number): number {
+            return $asData!(self)[0] = value;
+        }
+
+        export function $m12(self: Matrix4x4Writer, value: number): number {
+            return $asData!(self)[4] = value;
+        }
+
+        export function $m13(self: Matrix4x4Writer, value: number): number {
+            return $asData!(self)[8] = value;
+        }
+
+        export function $m14(self: Matrix4x4Writer, value: number): number {
+            return $asData!(self)[12] = value;
+        }
+
+        export function $m21(self: Matrix4x4Writer, value: number): number {
+            return $asData!(self)[1] = value;
+        }
+
+        export function $m22(self: Matrix4x4Writer, value: number): number {
+            return $asData!(self)[5] = value;
+        }
+
+        export function $m23(self: Matrix4x4Writer, value: number): number {
+            return $asData!(self)[9] = value;
+        }
+
+        export function $m24(self: Matrix4x4Writer, value: number): number {
+            return $asData!(self)[13] = value;
+        }
+
+        export function $m31(self: Matrix4x4Writer, value: number): number {
+            return $asData!(self)[2] = value;
+        }
+
+        export function $m32(self: Matrix4x4Writer, value: number): number {
+            return $asData!(self)[6] = value;
+        }
+
+        export function $m33(self: Matrix4x4Writer, value: number): number {
+            return $asData!(self)[10] = value;
+        }
+
+        export function $m34(self: Matrix4x4Writer, value: number): number {
+            return $asData!(self)[14] = value;
+        }
+
+        export function $m41(self: Matrix4x4Writer, value: number): number {
+            return $asData!(self)[3] = value;
+        }
+
+        export function $m42(self: Matrix4x4Writer, value: number): number {
+            return $asData!(self)[7] = value;
+        }
+
+        export function $m43(self: Matrix4x4Writer, value: number): number {
+            return $asData!(self)[11] = value;
+        }
+
+        export function $m44(self: Matrix4x4Writer, value: number): number {
+            return $asData!(self)[15] = value;
+        }
+    }
+
+    export function $fromTuple(tuple: Matrix4x4Tuple): Matrix4x4Writer {
+        return tuple as unknown as Matrix4x4Writer;
+    }
 }
 
 export type Matrix4x4Tuple = [

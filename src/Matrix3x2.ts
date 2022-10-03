@@ -1,87 +1,95 @@
 import { ImmutConvertable } from "./types/Immutable";
 
-export namespace Matrix3x2Array {
+export interface Matrix3x2Reader {
+    _type: "Matrix3x2Reader";
+    $m11(): number;
+    $m12(): number;
+    $m21(): number;
+    $m22(): number;
+    $m31(): number;
+    $m32(): number;
+}
+
+export namespace Matrix3x2Reader {
     export namespace Methods {
-        export function $asData(array: Matrix3x2Array): Matrix3x2Tuple {
-            return array as unknown as Matrix3x2Tuple;
+        export function $asData(self: Matrix3x2Reader): Readonly<Matrix3x2Tuple> {
+            return self as unknown as Readonly<Matrix3x2Tuple>;
         }
 
-        export function $getM11(array: Matrix3x2Array): number {
-            return $asData!(array)[0];
+        export function $m11(self: Matrix3x2Reader): number {
+            return $asData!(self)[0];
         }
 
-        export function $getM12(array: Matrix3x2Array): number {
-            return $asData!(array)[3];
+        export function $m12(self: Matrix3x2Reader): number {
+            return $asData!(self)[3];
         }
 
-        export function $getM21(array: Matrix3x2Array): number {
-            return $asData!(array)[1];
+        export function $m21(self: Matrix3x2Reader): number {
+            return $asData!(self)[1];
         }
 
-        export function $getM22(array: Matrix3x2Array): number {
-            return $asData!(array)[4];
+        export function $m22(self: Matrix3x2Reader): number {
+            return $asData!(self)[4];
         }
 
-        export function $getM31(array: Matrix3x2Array): number {
-            return $asData!(array)[2];
+        export function $m31(self: Matrix3x2Reader): number {
+            return $asData!(self)[2];
         }
 
-        export function $getM32(array: Matrix3x2Array): number {
-            return $asData!(array)[5];
-        }
-
-        export function $setM11(array: Matrix3x2Array, value: number): number {
-            return $asData!(array)[0] = value;
-        }
-
-        export function $setM12(array: Matrix3x2Array, value: number): number {
-            return $asData!(array)[3] = value;
-        }
-
-        export function $setM21(array: Matrix3x2Array, value: number): number {
-            return $asData!(array)[1] = value;
-        }
-
-        export function $setM22(array: Matrix3x2Array, value: number): number {
-            return $asData!(array)[4] = value;
-        }
-
-        export function $setM31(array: Matrix3x2Array, value: number): number {
-            return $asData!(array)[2] = value;
-        }
-
-        export function $setM32(array: Matrix3x2Array, value: number): number {
-            return $asData!(array)[5] = value;
+        export function $m32(self: Matrix3x2Reader): number {
+            return $asData!(self)[5];
         }
     }
 
-    export function $fromMatrix3x2(matrix: Matrix3x2): Matrix3x2Array {
-        return matrix.elements as unknown as Matrix3x2Array;
-    }
-
-    export function $fromMatrix3x2Tuple(tuple: Matrix3x2Tuple): Matrix3x2Array {
-        return tuple as unknown as Matrix3x2Array;
+    export function $fromTuple(tuple: Readonly<Matrix3x2Tuple>): Matrix3x2Reader {
+        return tuple as unknown as Matrix3x2Reader;
     }
 }
 
-export interface ReadonlyMatrix3x2Array {
-    _type: ReadonlyMatrix3x2Array;
-    $getM11(): number;
-    $getM12(): number;
-    $getM21(): number;
-    $getM22(): number;
-    $getM31(): number;
-    $getM32(): number;
+export interface Matrix3x2Writer {
+    _type: "Matrix3x2Writer";
+    $m11(value: number): number;
+    $m12(value: number): number;
+    $m21(value: number): number;
+    $m22(value: number): number;
+    $m31(value: number): number;
+    $m32(value: number): number;
 }
 
-export interface Matrix3x2Array extends ReadonlyMatrix3x2Array {
-    _type: Matrix3x2Array;
-    $setM11(value: number): number;
-    $setM12(value: number): number;
-    $setM21(value: number): number;
-    $setM22(value: number): number;
-    $setM31(value: number): number;
-    $setM32(value: number): number;
+export namespace Matrix3x2Writer {
+    export namespace Methods {
+        export function $asData(self: Matrix3x2Writer): Matrix3x2Tuple {
+            return self as unknown as Matrix3x2Tuple;
+        }
+
+        export function $m11(self: Matrix3x2Writer, value: number): number {
+            return $asData!(self)[0] = value;
+        }
+
+        export function $m12(self: Matrix3x2Writer, value: number): number {
+            return $asData!(self)[3] = value;
+        }
+
+        export function $m21(self: Matrix3x2Writer, value: number): number {
+            return $asData!(self)[1] = value;
+        }
+
+        export function $m22(self: Matrix3x2Writer, value: number): number {
+            return $asData!(self)[4] = value;
+        }
+
+        export function $m31(self: Matrix3x2Writer, value: number): number {
+            return $asData!(self)[2] = value;
+        }
+
+        export function $m32(self: Matrix3x2Writer, value: number): number {
+            return $asData!(self)[5] = value;
+        }
+    }
+
+    export function $fromTuple(tuple: Matrix3x2Tuple): Matrix3x2Writer {
+        return tuple as unknown as Matrix3x2Writer;
+    }
 }
 
 export type Matrix3x2Tuple = [
