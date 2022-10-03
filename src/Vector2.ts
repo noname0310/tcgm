@@ -1,5 +1,7 @@
-import { Matrix3x2, Matrix3x2Reader } from "./Matrix3x2";
-import { Matrix4x4, Matrix4x4Reader } from "./Matrix4x4";
+import { Matrix3x2 } from "./Matrix3x2";
+import { Matrix3x2Reader } from "./Matrix3x2.internalmacro";
+import { Matrix4x4 } from "./Matrix4x4";
+import { Matrix4x4Reader } from "./Matrix4x4.internalmacro";
 import { Quaternion } from "./Quaternion";
 import { Immutable, ImmutConvertable } from "./types/Immutable";
 import { XY } from "./VectorLike";

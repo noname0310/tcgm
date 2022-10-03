@@ -4,6 +4,7 @@ import TsMacros from "ts-macros";
 import ts from "typescript";
 import babel from 'gulp-babel';
 import merge from 'merge-stream';
+import filter from 'gulp-filter';
 
 const clean = require('gulp-clean') as () => NodeJS.ReadWriteStream;
 
@@ -37,8 +38,10 @@ gulp.task("default", () => {
     return merge(
         cleanStream,
         merge([
-            tsBuildResult.dts,
-            jsBuildResult
+            tsBuildResult.dts
+                .pipe(filter(['**/*.ts', '!**/*.internalmacro.d.ts'])),
+          jsBuildResult
+                .pipe(filter(['**/*.js', '!**/*.internalmacro.js']))
         ]).pipe(gulp.dest("dist"))
     );
 });
