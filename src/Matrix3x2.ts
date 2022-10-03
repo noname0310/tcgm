@@ -2,31 +2,59 @@ import { ImmutConvertable } from "./types/Immutable";
 
 export namespace Matrix3x2Array {
     export namespace Methods {
-        export function $asData(array: Matrix3x2Array): Matrix3x2Tuple {
-            return array as unknown as Matrix3x2Tuple;
+        export function $asData(array: Matrix3x2Array): Matrix3x2Tuple;
+
+        export function $asData(array: ReadonlyMatrix3x2Array): Readonly<Matrix3x2Tuple>;
+
+        export function $asData(array: Matrix3x2Array|ReadonlyMatrix3x2Array): Matrix3x2Tuple|Readonly<Matrix3x2Tuple> {
+            return array as unknown as Matrix3x2Tuple|Readonly<Matrix3x2Tuple>;
         }
 
-        export function $getM11(array: Matrix3x2Array): number {
+        export function $getM11(array: Matrix3x2Array): number;
+
+        export function $getM11(array: ReadonlyMatrix3x2Array): number;
+
+        export function $getM11(array: Matrix3x2Array|ReadonlyMatrix3x2Array): number {
             return $asData!(array)[0];
         }
 
-        export function $getM12(array: Matrix3x2Array): number {
+        export function $getM12(array: Matrix3x2Array): number;
+
+        export function $getM12(array: ReadonlyMatrix3x2Array): number;
+
+        export function $getM12(array: Matrix3x2Array|ReadonlyMatrix3x2Array): number {
             return $asData!(array)[3];
         }
 
-        export function $getM21(array: Matrix3x2Array): number {
+        export function $getM21(array: Matrix3x2Array): number;
+
+        export function $getM21(array: ReadonlyMatrix3x2Array): number;
+
+        export function $getM21(array: Matrix3x2Array|ReadonlyMatrix3x2Array): number {
             return $asData!(array)[1];
         }
 
-        export function $getM22(array: Matrix3x2Array): number {
+        export function $getM22(array: Matrix3x2Array): number;
+
+        export function $getM22(array: ReadonlyMatrix3x2Array): number;
+
+        export function $getM22(array: Matrix3x2Array|ReadonlyMatrix3x2Array): number {
             return $asData!(array)[4];
         }
 
-        export function $getM31(array: Matrix3x2Array): number {
+        export function $getM31(array: Matrix3x2Array): number;
+
+        export function $getM31(array: ReadonlyMatrix3x2Array): number;
+
+        export function $getM31(array: Matrix3x2Array|ReadonlyMatrix3x2Array): number {
             return $asData!(array)[2];
         }
 
-        export function $getM32(array: Matrix3x2Array): number {
+        export function $getM32(array: Matrix3x2Array): number;
+
+        export function $getM32(array: ReadonlyMatrix3x2Array): number;
+
+        export function $getM32(array: Matrix3x2Array|ReadonlyMatrix3x2Array): number {
             return $asData!(array)[5];
         }
 
@@ -54,21 +82,26 @@ export namespace Matrix3x2Array {
             return $asData!(array)[5] = value;
         }
     }
+    
+    export function $fromMatrix3x2(matrix: Matrix3x2): Matrix3x2Array;
 
-    export function $fromMatrix3x2(matrix: Matrix3x2): Matrix3x2Array {
-        return matrix.elements as unknown as Matrix3x2Array;
+    export function $fromMatrix3x2(matrix: ReadonlyMatrix3x2): ReadonlyMatrix3x2Array;
+
+    export function $fromMatrix3x2(matrix: Matrix3x2|ReadonlyMatrix3x2): Matrix3x2Array|ReadonlyMatrix3x2Array {
+        return matrix.elements as unknown as Matrix3x2Array|ReadonlyMatrix3x2Array;
     }
 
-    export function $fromTuple(tuple: Matrix3x2Tuple): Matrix3x2Array {
-        return tuple as unknown as Matrix3x2Array;
-    }
+    export function $fromMatrix3x2Tuple(tuple: Matrix3x2Tuple): Matrix3x2Array;
 
-    export function $fromReadonlyMatrix3x2(matrix: ReadonlyMatrix3x2): Matrix3x2Array {
-        return matrix.elements as unknown as Matrix3x2Array;
+    export function $fromMatrix3x2Tuple(tuple: Readonly<Matrix3x2Tuple>): ReadonlyMatrix3x2Array;
+
+    export function $fromMatrix3x2Tuple(tuple: Matrix3x2Tuple|Readonly<Matrix3x2Tuple>): Matrix3x2Array|ReadonlyMatrix3x2Array {
+        return tuple as unknown as Matrix3x2Array|ReadonlyMatrix3x2Array;
     }
 }
 
 export interface ReadonlyMatrix3x2Array {
+    _type: ReadonlyMatrix3x2Array;
     $getM11(): number;
     $getM12(): number;
     $getM21(): number;
@@ -78,6 +111,7 @@ export interface ReadonlyMatrix3x2Array {
 }
 
 export interface Matrix3x2Array extends ReadonlyMatrix3x2Array {
+    _type: Matrix3x2Array;
     $setM11(value: number): number;
     $setM12(value: number): number;
     $setM21(value: number): number;
