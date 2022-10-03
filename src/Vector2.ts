@@ -130,13 +130,9 @@ export class Vector2 implements ImmutConvertable<ReadonlyVector2> {
      * @param other The Vector2 to compare this instance to.
      * @returns True if the other Vector2 is equal to this instance; False otherwise.
      */
-    public equals(other: Vector2): boolean {
+    public equals(other: Immutable<Vector2>): boolean {
         return this.x == other.x && this.y == other.y;
     }
-
-    // #endregion Public Instance Methods
-
-    // #region Public Static Methods
 
     /**
      * Returns the Euclidean distance between this point and the other point.
@@ -326,136 +322,220 @@ export class Vector2 implements ImmutConvertable<ReadonlyVector2> {
     }
 
     /**
-     * Returns the dot product of two vectors.
-     * @param value1 The first vector.
-     * @param value2 The second vector.
-     * @returns 
+     * Returns the dot product of this vector and the other vector.
+     * @param other The other vector.
+     * @returns The dot product.
      */
-    public static dot(value1: Immutable<Vector2>, value2: Immutable<Vector2>): number {
-        return value1.x * value2.x + value1.y * value2.y;
+    public dot(other: Immutable<Vector2>): number {
+        return this.x * other.x + this.y * other.y;
     }
 
     /**
      * Returns a vector whose elements are the minimum of each of the pairs of elements in the two source vectors.
      * @param value1 The first source vector.
      * @param value2 The second source vector.
-     * @returns The minimized vector.
+     * @returns This vector after the min operation.
      */
-    public static min(value1: Immutable<Vector2>, value2: Immutable<Vector2>): Vector2 {
-        return new Vector2(
-            (value1.x < value2.x) ? value1.x : value2.x,
-            (value1.y < value2.y) ? value1.y : value2.y);
+    public minVectors(value1: Immutable<Vector2>, value2: Immutable<Vector2>): Vector2 {
+        this.x = (value1.x < value2.x) ? value1.x : value2.x;
+        this.y = (value1.y < value2.y) ? value1.y : value2.y;
+
+        return this;
+    }
+
+    /**
+     * Returns a vector whose elements are the minimum of each of the pairs of elements in this vector and the other vector.
+     * @param other The other source vector.
+     * @returns This vector after the min operation.
+     */
+    public min(other: Immutable<Vector2>): Vector2 {
+        this.x = (this.x < other.x) ? this.x : other.x;
+        this.y = (this.y < other.y) ? this.y : other.y;
+
+        return this;
     }
 
     /**
      * Returns a vector whose elements are the maximum of each of the pairs of elements in the two source vectors.
      * @param value1 The first source vector.
      * @param value2 The second source vector.
-     * @returns The maximized vector.
+     * @returns This vector after the max operation.
      */
-    public static max(value1: Immutable<Vector2>, value2: Immutable<Vector2>): Vector2 {
-        return new Vector2(
-            (value1.x > value2.x) ? value1.x : value2.x,
-            (value1.y > value2.y) ? value1.y : value2.y);
+    public maxVectors(value1: Immutable<Vector2>, value2: Immutable<Vector2>): Vector2 {
+        this.x = (value1.x > value2.x) ? value1.x : value2.x;
+        this.y = (value1.y > value2.y) ? value1.y : value2.y;
+
+        return this;
     }
 
     /**
-     * Returns a vector whose elements are the absolute values of each of the source vector's elements.
-     * @param value The source vector.
-     * @returns The absolute value vector.
+     * Returns a vector whose elements are the maximum of each of the pairs of elements in this vector and the other vector.
+     * @param other The other source vector.
+     * @returns This vector after max operation.
      */
-    public static abs(value: Immutable<Vector2>): Vector2 {
-        return new Vector2(Math.abs(value.x), Math.abs(value.y));
+    public max(other: Immutable<Vector2>): Vector2 {
+        this.x = (this.x > other.x) ? this.x : other.x;
+        this.y = (this.y > other.y) ? this.y : other.y;
+
+        return this;
     }
 
     /**
-     * Returns a vector whose elements are the square root of each of the source vector's elements.
-     * @param value The source vector.
-     * @returns The square root vector.
+     * Returns a vector whose elements are the absolute values of this vector's elements.
+     * @returns This vector after the absolute operation.
      */
-    public static sqrt(value: Immutable<Vector2>): Vector2 {
-        return new Vector2(Math.sqrt(value.x), Math.sqrt(value.y));
+    public abs(): Vector2 {
+        this.x = Math.abs(this.x);
+        this.y = Math.abs(this.y);
+
+        return this;
+    }
+
+    /**
+     * Returns a vector whose elements are the square root of each of this vector's elements.
+     * @returns This vector after the square root operation.
+     */
+    public sqrt(): Vector2 {
+        this.x = Math.sqrt(this.x);
+        this.y = Math.sqrt(this.y);
+
+        return this;
     }
     
     /**
      * Adds two vectors together.
      * @param left The first source vector.
      * @param right The second source vector.
-     * @returns The summed vector.
+     * @returns This vector after the addition operation.
      */
-    public static add(left: Immutable<Vector2>, right: Immutable<Vector2>): Vector2 {
-        return new Vector2(left.x + right.x, left.y + right.y);
+    public addVectors(left: Immutable<Vector2>, right: Immutable<Vector2>): Vector2 {
+        this.x = left.x + right.x;
+        this.y = left.y + right.y;
+
+        return this;
+    }
+
+    /**
+     * Adds the given vector to this vector.
+     * @param other The other vector.
+     * @returns This vector after the addition operation.
+     */
+    public add(other: Immutable<Vector2>): Vector2 {
+        this.x += other.x;
+        this.y += other.y;
+
+        return this;
     }
 
     /**
      * Subtracts the second vector from the first.
      * @param left The first source vector.
      * @param right The second source vector.
-     * @returns The difference vector.
+     * @returns This vector after the subtraction operation.
      */
-    public static sub(left: Immutable<Vector2>, right: Immutable<Vector2>): Vector2 {
-        return new Vector2(left.x - right.x, left.y - right.y);
+    public subVectors(left: Immutable<Vector2>, right: Immutable<Vector2>): Vector2 {
+        this.x = left.x - right.x;
+        this.y = left.y - right.y;
+
+        return this;
+    }
+
+    /**
+     * Subtracts the given vector from this vector.
+     * @param other The other vector.
+     * @returns This vector after the subtraction operation.
+     */
+    public sub(other: Immutable<Vector2>): Vector2 {
+        this.x -= other.x;
+        this.y -= other.y;
+
+        return this;
     }
 
     /**
      * Multiplies two vectors together.
      * @param left The first source vector.
      * @param right The second source vector.
-     * @returns The product vector.
+     * @returns This vector after the multiplication operation.
      */
-    public static mul(left: Immutable<Vector2>, right: Immutable<Vector2>): Vector2 {
-        return new Vector2(left.x * right.x, left.y * right.y);
+    public mulVectors(left: Immutable<Vector2>, right: Immutable<Vector2>): Vector2 {
+        this.x = left.x * right.x;
+        this.y = left.y * right.y;
+
+        return this;
     }
 
     /**
-     * Multiplies a vector by the given scalar.
-     * @param left The source vector.
-     * @param right The scalar value.
-     * @returns The scaled vector.
+     * Multiplies this vector by the given vector.
+     * @param other The other vector.
+     * @returns This vector after the multiplication operation.
      */
-    public static mulScalar(left: Immutable<Vector2>, right: number): Vector2 {
-        return new Vector2(left.x * right, left.y * right);
+    public mul(other: Immutable<Vector2>): Vector2 {
+        this.x *= other.x;
+        this.y *= other.y;
+
+        return this;
+    }
+
+    /**
+     * Multiplies this vector by the given scalar.
+     * @param other The scalar value.
+     * @returns This vector after the multiplication operation.
+     */
+    public mulScalar(other: number): Vector2 {
+        this.x *= other;
+        this.y *= other;
+
+        return this;
     }
 
     /**
      * Divides the first vector by the second.
      * @param left The first source vector.
      * @param right The second source vector.
-     * @returns The vector resulting from the division.
+     * @returns This vector after the division operation.
      */
-    public static div(left: Immutable<Vector2>, right: Immutable<Vector2>): Vector2 {
-        return new Vector2(left.x / right.x, left.y / right.y);
+    public divVectors(left: Immutable<Vector2>, right: Immutable<Vector2>): Vector2 {
+        this.x = left.x / right.x;
+        this.y = left.y / right.y;
+
+        return this;
     }
 
     /**
-     * Divides the vector by the given scalar.
-     * @param value1 The source vector.
-     * @param value2 The scalar value.
-     * @returns The result of the division.
+     * Divides this vector by the given vector.
+     * @param other The other vector.
+     * @returns This vector after the division operation.
      */
-    public static divScalar(value1: Immutable<Vector2>, value2: number): Vector2 {
-        const invDiv = 1 / value2;
-        return new Vector2(value1.x * invDiv, value1.y * invDiv);
+    public div(other: Immutable<Vector2>): Vector2 {
+        this.x /= other.x;
+        this.y /= other.y;
+
+        return this;
     }
 
     /**
-     * Negates a given vector.
-     * @param value The source vector.
-     * @returns The negated vector.
+     * Divides this vector by the given scalar.
+     * @param other The scalar value.
+     * @returns This vector after the division operation.
      */
-    public static negate(value: Immutable<Vector2>): Vector2 {
-        return new Vector2(-value.x, -value.y);
+    public divScalar(other: number): Vector2 {
+        this.x /= other;
+        this.y /= other;
+
+        return this;
     }
 
     /**
-     * Returns a boolean indicating whether the two given vectors are equal.
-     * @param left The first vector to compare.
-     * @param right The second vector to compare.
-     * @returns True if the vectors are equal; False otherwise.
+     * Negates this vector.
+     * @returns This vector after the negation operation.
      */
-    public static equals(left: Immutable<Vector2>, right: Immutable<Vector2>): boolean {
-        return left.x == right.x && left.y == right.y;
+    public negate(): Vector2 {
+        this.x = -this.x;
+        this.y = -this.y;
+
+        return this;
     }
 
-    // #endregion Public Static Methods
+    // #endregion Public Instance methods
 }
