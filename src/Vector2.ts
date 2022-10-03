@@ -152,6 +152,7 @@ export class Vector2 implements ImmutConvertable<ReadonlyVector2> {
     public copy(value: Immutable<XY>): Vector2 {
         this.x = value.x;
         this.y = value.y;
+
         return this;
     }
 
@@ -161,6 +162,41 @@ export class Vector2 implements ImmutConvertable<ReadonlyVector2> {
      */
     public clone(): Vector2 {
         return new Vector2(this.x, this.y);
+    }
+
+    /**
+     * Sets the vector's x and y values from the given values.
+     * @param x The x value.
+     * @param y The y value.
+     * @returns This vector.
+     */
+    public set(x: number, y: number): Vector2 {
+        this.x = x;
+        this.y = y;
+
+        return this;
+    }
+
+    /**
+     * Sets the vector's x value.
+     * @param x The x value.
+     * @returns This vector.
+     */
+    public setX(x: number): Vector2 {
+        this.x = x;
+
+        return this;
+    }
+
+    /**
+     * Sets the vector's y value.
+     * @param y The y value.
+     * @returns This vector.
+     */
+    public setY(y: number): Vector2 {
+        this.y = y;
+
+        return this;
     }
 
     /**
