@@ -1,5 +1,8 @@
 import { ImmutConvertable } from "./types/Immutable";
 
+/**
+ * @internal
+ */
 export interface Matrix3x2Reader {
     _type: "Matrix3x2Reader";
     $m11(): number;
@@ -10,6 +13,9 @@ export interface Matrix3x2Reader {
     $m32(): number;
 }
 
+/**
+ * @internal
+ */
 export namespace Matrix3x2Reader {
     export namespace Methods {
         export function $asData(self: Matrix3x2Reader): Readonly<Matrix3x2Tuple> {
@@ -46,6 +52,9 @@ export namespace Matrix3x2Reader {
     }
 }
 
+/**
+ * @internal
+ */
 export interface Matrix3x2Writer {
     _type: "Matrix3x2Writer";
     $m11(value: number): number;
@@ -56,6 +65,9 @@ export interface Matrix3x2Writer {
     $m32(value: number): number;
 }
 
+/**
+ * @internal
+ */
 export namespace Matrix3x2Writer {
     export namespace Methods {
         export function $asData(self: Matrix3x2Writer): Matrix3x2Tuple {

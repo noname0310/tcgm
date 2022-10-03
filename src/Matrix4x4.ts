@@ -1,3 +1,6 @@
+/**
+ * @internal
+ */
 export interface Matrix4x4Reader {
     _type: "Matrix4x4Reader";
     $m11(): number;
@@ -18,6 +21,9 @@ export interface Matrix4x4Reader {
     $m44(): number;
 }
 
+/**
+ * @internal
+ */
 export namespace Matrix4x4Reader {
     export namespace Methods {
         export function $asData(self: Matrix4x4Reader): Readonly<Matrix4x4Tuple> {
@@ -94,6 +100,9 @@ export namespace Matrix4x4Reader {
     }
 }
     
+/**
+ * @internal
+ */
 export interface Matrix4x4Writer {
     _type: "Matrix4x4Writer";
     $m11(value: number): number;
@@ -114,6 +123,9 @@ export interface Matrix4x4Writer {
     $m44(value: number): number;
 }
 
+/**
+ * @internal
+ */
 export namespace Matrix4x4Writer {
     export namespace Methods {
         export function $asData(self: Matrix4x4Writer): Matrix4x4Tuple {

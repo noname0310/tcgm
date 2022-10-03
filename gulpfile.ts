@@ -2,6 +2,10 @@ import gulp from "gulp";
 import gulpTs from "gulp-typescript";
 import TsMacros from "ts-macros";
 import ts from "typescript";
+import babel from 'gulp-babel';
+import merge from 'merge-stream';
+
+const clean = require('gulp-clean') as () => NodeJS.ReadWriteStream;
 
 const tsProject = gulpTs.createProject("tsconfig.json", {
     getCustomTransformers: (program?: ts.Program) => {
@@ -17,7 +21,24 @@ const tsProject = gulpTs.createProject("tsconfig.json", {
 });
 
 gulp.task("default", () => {
-    return gulp.src("src/**/*.ts")
-        .pipe(tsProject())
-        .pipe(gulp.dest("dist"));
+    const cleanStream = gulp.src("dist", { read: false, allowEmpty: true })
+        .pipe(clean());
+
+    const tsBuildResult = gulp.src("src/**/*.ts")
+        .pipe(tsProject());
+
+    const jsBuildResult = tsBuildResult.js
+        .pipe(babel({
+            plugins: [
+                "babel-plugin-remove-unused-import",
+            ]
+        }));
+
+    return merge(
+        cleanStream,
+        merge([
+            tsBuildResult.dts,
+            jsBuildResult
+        ]).pipe(gulp.dest("dist"))
+    );
 });
