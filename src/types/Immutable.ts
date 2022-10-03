@@ -15,10 +15,16 @@ interface DeepReadonlyArray<T> extends ReadonlyArray<DeepReadonly<T>> { }
  
 interface DeepReadonlyMap<K, V> extends ReadonlyMap<DeepReadonly<K>, DeepReadonly<V>> { }
 
+/**
+ * Objects that can be converted to the Immutable<T> type implement this interface.
+ */
 export type ImmutConvertable<T = any> = T & {
     freeze(): Immutable<T>;
 };
 
+/**
+ * It is a type that makes the type immutable. (More precisely, it's more like read only.)
+ */
 export type Immutable<T extends ImmutConvertable> = 
     T extends ImmutConvertable<infer U>
         ? U
