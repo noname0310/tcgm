@@ -103,7 +103,7 @@ export class Vector2 implements ImmutConvertable<ReadonlyVector2> {
      */
     public static readonly unitY = new Vector2(0, 1).freeze();
 
-    // #endregion Public Static Properties
+    // #endregion
 
     /**
      * The X component of the vector.
@@ -133,7 +133,7 @@ export class Vector2 implements ImmutConvertable<ReadonlyVector2> {
         this.y = y;
     }
 
-    // #endregion Constructors
+    // #endregion
 
     // #region Public Instance methods
 
@@ -645,5 +645,5 @@ export class Vector2 implements ImmutConvertable<ReadonlyVector2> {
         return this;
     }
 
-    // #endregion Public Instance methods
+    // #endregion
 }
