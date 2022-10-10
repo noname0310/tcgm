@@ -1,7 +1,7 @@
 import { Matrix4x4 } from "./Matrix4x4";
 import { Matrix4x4Reader } from "./Matrix4x4.internalmacro";
 import { Quaternion } from "./Quaternion";
-import { Immutable, ImmutConvertable } from "./types/Immutable";
+import { Immutable, ImmutConvertible } from "./types/Immutable";
 import { XYZ } from "./VectorLike";
 
 /**
@@ -86,7 +86,7 @@ export interface ReadonlyVector3 {
 /**
  * A structure encapsulating three single precision floating point values and provides hardware accelerated methods.
  */
-export class Vector3 implements ImmutConvertable<ReadonlyVector3> {
+export class Vector3 implements ImmutConvertible<ReadonlyVector3> {
     // #region Public Static Properties
 
     /**

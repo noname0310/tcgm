@@ -1,4 +1,4 @@
-import { ImmutConvertable } from "./types/Immutable";
+import { ImmutConvertible } from "./types/Immutable";
 
 export type Matrix3x2Tuple = [
     number, number, number,
@@ -12,7 +12,7 @@ export interface ReadonlyMatrix3x2 {
 /**
  * A structure encapsulating a 3x2 matrix.
  */
-export class Matrix3x2 implements ImmutConvertable<ReadonlyMatrix3x2> {
+export class Matrix3x2 implements ImmutConvertible<ReadonlyMatrix3x2> {
     /**
      * The elements of the matrix in column-major order.
      * 
