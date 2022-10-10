@@ -5,7 +5,7 @@ import { Immutable, ImmutConvertible } from "./types/Immutable";
 import { XYZ } from "./VectorLike";
 
 /**
- * readonly 3D vector
+ * readonly 3D vector.
  */
 interface ReadonlyVector3 {
     /**
@@ -84,7 +84,7 @@ interface ReadonlyVector3 {
 }
 
 /**
- * A structure encapsulating three single precision floating point values and provides hardware accelerated methods.
+ * A structure encapsulating three double precision floating point values.
  */
 export class Vector3 implements ImmutConvertible<ReadonlyVector3> {
     // #region Public Static Properties
@@ -93,18 +93,22 @@ export class Vector3 implements ImmutConvertible<ReadonlyVector3> {
      * The vector (0,0,0).
      */
     public static readonly zero = new Vector3(0, 0, 0).freeze();
+
     /**
      * The vector (1,1,1).
      */
     public static readonly one = new Vector3(1, 1, 1).freeze();
+
     /**
      * The vector (1,0,0).
      */
     public static readonly unitX = new Vector3(1, 0, 0).freeze();
+
     /**
      * The vector (0,1,0).
      */
     public static readonly unitY = new Vector3(0, 1, 0).freeze();
+    
     /**
      * The vector (0,0,1).
      */

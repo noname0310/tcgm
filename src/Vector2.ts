@@ -7,7 +7,7 @@ import { Immutable, ImmutConvertible } from "./types/Immutable";
 import { XY } from "./VectorLike";
 
 /**
- * readonly 2D vector
+ * readonly 2D vector.
  */
 interface ReadonlyVector2 {
     /**
@@ -90,14 +90,17 @@ export class Vector2 implements ImmutConvertible<ReadonlyVector2> {
      * The vector (0,0).
      */
     public static readonly zero = new Vector2(0, 0).freeze();
+
     /**
      * The vector (1,1).
      */
     public static readonly one = new Vector2(1, 1).freeze();
+
     /**
      * The vector (1,0).
      */
     public static readonly unitX = new Vector2(1, 0).freeze();
+    
     /**
      * The vector (0,1).
      */
