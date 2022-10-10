@@ -178,7 +178,7 @@ export class Vector3 implements ImmutConvertible<ReadonlyVector3> {
 
     /**
      * Returns a new Vector3 with the same x, y and z values as this one. 
-     * @returns 
+     * @returns The new Vector3.
      */
     public clone(): Vector3 {
         return new Vector3(this.x, this.y, this.z);

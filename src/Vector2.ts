@@ -162,7 +162,7 @@ export class Vector2 implements ImmutConvertible<ReadonlyVector2> {
 
     /**
      * Returns a new Vector2 with the same x and y values as this one. 
-     * @returns 
+     * @returns The new Vector2.
      */
     public clone(): Vector2 {
         return new Vector2(this.x, this.y);
