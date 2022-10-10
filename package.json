@@ -4,7 +4,8 @@
     "description": "typescript cg math library",
     "scripts": {
         "start": "webpack serve --mode development",
-        "build": "gulp"
+        "build": "gulp",
+        "lint": "eslint --ext .ts,.tsx src --fix"
     },
     "author": "noname0310",
     "license": "MIT",

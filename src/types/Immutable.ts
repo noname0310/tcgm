@@ -1,9 +1,11 @@
-type Primitive = undefined|null|boolean|string|number|Function|Element;
+type FunctionLike = (...args: any[]) => any;
+
+type Primitive = undefined|null|boolean|string|number|FunctionLike|Element;
  
 type DeepReadonly<T> = 
     T extends Primitive
         ? T
-        : T extends Array<infer U>
+        : T extends (infer U)[]
             ? DeepReadonlyArray<U>
             : T extends Map<infer K, infer V>
                 ? DeepReadonlyMap<K, V>
@@ -11,9 +13,9 @@ type DeepReadonly<T> =
  
 type DeepImmutableObject<T> = { readonly [K in keyof T]: DeepReadonly<T[K]> };
  
-interface DeepReadonlyArray<T> extends ReadonlyArray<DeepReadonly<T>> { }
+type DeepReadonlyArray<T> = readonly DeepReadonly<T>[]
  
-interface DeepReadonlyMap<K, V> extends ReadonlyMap<DeepReadonly<K>, DeepReadonly<V>> { }
+type DeepReadonlyMap<K, V> = ReadonlyMap<DeepReadonly<K>, DeepReadonly<V>>
 
 /**
  * Objects that can be converted to the Immutable<T> type implement this interface.

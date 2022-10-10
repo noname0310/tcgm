@@ -1,7 +1,7 @@
 import { Matrix3x2Tuple } from "./Matrix3x2";
 
 export interface Matrix3x2Reader {
-    _type: "Matrix3x2Reader";
+    type: "Matrix3x2Reader";
     $m11(): number;
     $m12(): number;
     $m21(): number;
@@ -47,7 +47,7 @@ export namespace Matrix3x2Reader {
 }
 
 export interface Matrix3x2Writer {
-    _type: "Matrix3x2Writer";
+    type: "Matrix3x2Writer";
     $m11(value: number): number;
     $m12(value: number): number;
     $m21(value: number): number;

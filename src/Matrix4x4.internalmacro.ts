@@ -1,7 +1,7 @@
 import { Matrix4x4Tuple } from "./Matrix4x4";
 
 export interface Matrix4x4Reader {
-    _type: "Matrix4x4Reader";
+    type: "Matrix4x4Reader";
     $m11(): number;
     $m12(): number;
     $m13(): number;
@@ -97,7 +97,7 @@ export namespace Matrix4x4Reader {
 }
 
 export interface Matrix4x4Writer {
-    _type: "Matrix4x4Writer";
+    type: "Matrix4x4Writer";
     $m11(value: number): number;
     $m12(value: number): number;
     $m13(value: number): number;

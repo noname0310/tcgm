@@ -272,10 +272,13 @@ export class Vector2 implements ImmutConvertable<ReadonlyVector2> {
      */
     public normalize(): Vector2 {
         const ls = this.x * this.x + this.y * this.y;
-        const invNorm = 1.0 / Math.sqrt(ls);
+        const length = Math.sqrt(ls);
 
-        this.x *= invNorm;
-        this.y *= invNorm;
+        if (length === 0) throw new Error("Cannot normalize a vector with length 0.");
+
+        const invLength = 1.0 / length;
+        this.x *= invLength;
+        this.y *= invLength;
 
         return this;
     }
@@ -337,7 +340,7 @@ export class Vector2 implements ImmutConvertable<ReadonlyVector2> {
      * @param amount Value between 0 and 1 indicating the weight of the second source vector.
      * @returns This vector after the interpolation.
      */
-     public lerp(other: ReadonlyVector2, amount: number): Vector2 {
+    public lerp(other: ReadonlyVector2, amount: number): Vector2 {
         this.x += (other.x - this.x) * amount;
         this.y += (other.y - this.y) * amount;
 
