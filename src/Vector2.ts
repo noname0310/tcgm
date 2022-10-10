@@ -109,6 +109,7 @@ export class Vector2 implements ImmutConvertable<ReadonlyVector2> {
      * The X component of the vector.
      */
     public x: number;
+    
     /**
      * The Y component of the vector.
      */
