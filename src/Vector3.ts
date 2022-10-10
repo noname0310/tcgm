@@ -7,7 +7,7 @@ import { XYZ } from "./VectorLike";
 /**
  * readonly 3D vector
  */
-export interface ReadonlyVector3 {
+interface ReadonlyVector3 {
     /**
      * The X component of the vector.
      */

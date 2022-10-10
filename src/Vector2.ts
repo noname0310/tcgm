@@ -9,7 +9,7 @@ import { XY } from "./VectorLike";
 /**
  * readonly 2D vector
  */
-export interface ReadonlyVector2 {
+interface ReadonlyVector2 {
     /**
      * The X component of the vector.
      */

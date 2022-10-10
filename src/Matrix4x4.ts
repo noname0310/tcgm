@@ -5,7 +5,7 @@ export type Matrix4x4Tuple = [
     number, number, number, number
 ];
 
-export interface ReadonlyMatrix4x4 {
+interface ReadonlyMatrix4x4 {
     readonly elements: Readonly<Matrix4x4Tuple>;
 }
 
