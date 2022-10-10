@@ -116,10 +116,12 @@ export class Vector3 implements ImmutConvertable<ReadonlyVector3> {
      * The X component of the vector.
      */
     public x: number;
+
     /**
      * The Y component of the vector.
      */
     public y: number;
+    
     /**
      * The Z component of the vector.
      */
