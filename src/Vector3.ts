@@ -695,9 +695,11 @@ export class Vector3 implements ImmutConvertible<ReadonlyVector3> {
      * @returns This vector after the division operation.
      */
     public divScalar(other: number): Vector3 {
-        this.x /= other;
-        this.y /= other;
-        this.z /= other;
+        const invDiv = 1.0 / other;
+
+        this.x *= invDiv;
+        this.y *= invDiv;
+        this.z *= invDiv;
 
         return this;
     }

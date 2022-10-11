@@ -635,8 +635,10 @@ export class Vector2 implements ImmutConvertible<ReadonlyVector2> {
      * @returns This vector after the division operation.
      */
     public divScalar(other: number): Vector2 {
-        this.x /= other;
-        this.y /= other;
+        const invDiv = 1 / other;
+
+        this.x *= invDiv;
+        this.y *= invDiv;
 
         return this;
     }
