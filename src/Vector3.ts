@@ -5,7 +5,7 @@ import type { Immutable, ImmutConvertible } from "./types/Immutable";
 import type { XYZ } from "./VectorLike";
 
 /**
- * readonly 3D vector.
+ * Readonly 3D vector.
  */
 interface ReadonlyVector3 {
     /**

@@ -7,7 +7,7 @@ import type { Vector3 } from "./Vector3";
 import type { XYZW } from "./VectorLike";
 
 /**
- * readonly 4D vector.
+ * Readonly 4D vector.
  */
 interface ReadonlyVector4 {
     /**

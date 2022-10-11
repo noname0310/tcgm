@@ -7,7 +7,7 @@ import type { Immutable, ImmutConvertible } from "./types/Immutable";
 import type { XY } from "./VectorLike";
 
 /**
- * readonly 2D vector.
+ * Readonly 2D vector.
  */
 interface ReadonlyVector2 {
     /**
