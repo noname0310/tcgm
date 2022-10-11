@@ -421,7 +421,7 @@ export class Vector3 implements ImmutConvertible<ReadonlyVector3> {
      * @param matrix The transformation matrix.
      * @returns This vector after the transformation.
      */
-    public transformFrom4x4Matrix(matrix: Immutable<Matrix4x4>): Vector3 {
+    public transformFromMatrix4x4(matrix: Immutable<Matrix4x4>): Vector3 {
         const m = Matrix4x4Reader.$fromTuple!(matrix.elements);
         const x = this.x;
         const y = this.y;
@@ -438,7 +438,7 @@ export class Vector3 implements ImmutConvertible<ReadonlyVector3> {
      * @param matrix The transformation matrix.
      * @returns This vector after the transformation.
      */
-    public transformNormalFrom4x4Matrix(matrix: Immutable<Matrix4x4>): Vector3 {
+    public transformNormalFromMatrix4x4(matrix: Immutable<Matrix4x4>): Vector3 {
         const m = Matrix4x4Reader.$fromTuple!(matrix.elements);
         const x = this.x;
         const y = this.y;
