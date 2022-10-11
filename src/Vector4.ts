@@ -1,7 +1,7 @@
 import { Matrix4x4 } from "./Matrix4x4";
 import { Matrix4x4Reader } from "./Matrix4x4.internalmacro";
 import { Quaternion } from "./Quaternion";
-import { Immutable, ImmutConvertible } from "./types/Immutable"
+import { Immutable, ImmutConvertible } from "./types/Immutable";
 import { Vector2 } from "./Vector2";
 import { Vector3 } from "./Vector3";
 import { XYZW } from "./VectorLike";
@@ -29,6 +29,65 @@ interface ReadonlyVector4 {
      * The W component of the vector.
      */
     readonly w: number;
+
+    /**
+     * Returns a new Vector4 with the same x, y, z and w values as this one. 
+     * @returns The new Vector4.
+     */
+    clone(): Vector4;
+
+    /**
+     * Returns a String representing this Vector4 instance.
+     * @returns The string representation.
+     */
+    toString(): string;
+
+    /**
+     * Returns the length of the vector.
+     * @returns The vector's length.
+     */
+    length(): number;
+
+    /**
+     * Returns the length of the vector squared. This operation is cheaper than Length().
+     * @returns The vector's length squared.
+     */
+    lengthSquared(): number;
+    
+    /**
+     * Copies the contents of the vector into the given array, starting from the given index.
+     * @param array The destination array.
+     * @param index The index to start copying at.
+     */
+    copyToArray(array: number[], index?: number): void;
+
+    /**
+     * Returns a boolean indicating whether the given Vector3 is equal to this Vector4 instance.
+     * @param other The Vector4 to compare this instance to.
+     * @returns True if the other Vector4 is equal to this instance; False otherwise.
+     */
+    equals(other: ReadonlyVector4): boolean;
+    
+    /**
+     * Returns the Euclidean distance between this point and the other point.
+     * @param other The other point.
+     * @returns The distance.
+     */
+    distanceTo(other: ReadonlyVector4): number;
+
+    /**
+     * Returns the Euclidean distance squared between this point and the other point.
+     * @param other The other point.
+     * @returns The distance squared.
+     */
+    distanceSquaredTo(other: ReadonlyVector4): number;
+    
+    /**
+     * Returns the dot product of this vector and the other vector.
+     * @param other The other vector.
+     * @returns The dot product.
+     */
+    dot(other: ReadonlyVector4): number;
 }
 
 /**
@@ -249,22 +308,17 @@ export class Vector4 implements ImmutConvertible<ReadonlyVector4> {
     public equals(other: ReadonlyVector4): boolean {
         return this.x === other.x && this.y === other.y && this.z === other.z && this.w === other.w;
     }
-
-    // #endregion
-
-    // #region Public Static Methods
     
     /**
-     * Returns the Euclidean distance between the two given points.
-     * @param value1 The first point.
-     * @param value2 The second point.
+     * Returns the Euclidean distance between this point and the other point.
+     * @param other The other point.
      * @returns The distance.
      */
-    public static distance(value1: ReadonlyVector4, value2: ReadonlyVector4): number {
-        const dx = value1.x - value2.x;
-        const dy = value1.y - value2.y;
-        const dz = value1.z - value2.z;
-        const dw = value1.w - value2.w;
+    public distanceTo(other: ReadonlyVector4): number {
+        const dx = this.x - other.x;
+        const dy = this.y - other.y;
+        const dz = this.z - other.z;
+        const dw = this.w - other.w;
 
         const ls = dx * dx + dy * dy + dz * dz + dw * dw;
 
@@ -272,138 +326,166 @@ export class Vector4 implements ImmutConvertible<ReadonlyVector4> {
     }
 
     /**
-     * Returns the Euclidean distance squared between the two given points.
-     * @param value1 The first point.
-     * @param value2 The second point.
+     * Returns the Euclidean distance squared between this point and the other point.
+     * @param other The other point.
      * @returns The distance squared.
      */
-    public static distanceSquared(value1: ReadonlyVector4, value2: ReadonlyVector4): number {
-        const dx = value1.x - value2.x;
-        const dy = value1.y - value2.y;
-        const dz = value1.z - value2.z;
-        const dw = value1.w - value2.w;
+    public distanceSquaredTo(other: ReadonlyVector4): number {
+        const dx = this.x - other.x;
+        const dy = this.y - other.y;
+        const dz = this.z - other.z;
+        const dw = this.w - other.w;
 
         return dx * dx + dy * dy + dz * dz + dw * dw;
     }
     
     /**
-     * Returns a vector with the same direction as the given vector, but with a length of 1.
-     * @param vector The vector to normalize.
-     * @returns The normalized vector.
+     * Converts this vector into a unit vector.
+     * @returns This vector after the normalization.
      */
-    public static normalize(vector: ReadonlyVector4): Vector4 {
-        const ls = vector.x * vector.x + vector.y * vector.y + vector.z * vector.z + vector.w * vector.w;
-        const invNorm = 1.0 / Math.sqrt(ls);
+    public normalize(): Vector4 {
+        const ls = this.x * this.x + this.y * this.y + this.z * this.z + this.w * this.w;
+        const length = Math.sqrt(ls);
+        
+        if (length === 0) throw new Error("Cannot normalize a vector with length 0.");
 
-        return new Vector4(
-            vector.x * invNorm,
-            vector.y * invNorm,
-            vector.z * invNorm,
-            vector.w * invNorm
-        );
+        const invLength = 1.0 / length;
+        this.x *= invLength;
+        this.y *= invLength;
+        this.z *= invLength;
+        this.w *= invLength;
+
+        return this;
     }
 
     /**
-     * Restricts a vector between a min and max value.
-     * @param value1 The source vector.
+     * Restricts this vector between a min and max value.
      * @param min The minimum value.
      * @param max The maximum value.
-     * @returns The restricted vector.
+     * @returns This vector after the restriction.
      */
-    public static clamp(value1: ReadonlyVector4, min: ReadonlyVector4, max: ReadonlyVector4): Vector4 {
+    public clamp(min: ReadonlyVector4, max: ReadonlyVector4): Vector4 {
         // This compare order is very important!!!
         // We must follow HLSL behavior in the case user specified min value is bigger than max value.
         
-        let x = value1.x;
+        let x = this.x;
         x = (x > max.x) ? max.x : x;
         x = (x < min.x) ? min.x : x;
 
-        let y = value1.y;
+        let y = this.y;
         y = (y > max.y) ? max.y : y;
         y = (y < min.y) ? min.y : y;
 
-        let z = value1.z;
+        let z = this.z;
         z = (z > max.z) ? max.z : z;
         z = (z < min.z) ? min.z : z;
 
-        let w = value1.w;
+        let w = this.w;
         w = (w > max.w) ? max.w : w;
         w = (w < min.w) ? min.w : w;
 
-        return new Vector4(x, y, z, w);
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.w = w;
+
+        return this;
     }
     
     /**
-     * Linearly interpolates between two vectors based on the given weighting.
+     * Set this vector to linearly interpolate between value1 and value2 by amount.
      * @param value1 The first source vector.
      * @param value2 The second source vector.
      * @param amount Value between 0 and 1 indicating the weight of the second source vector.
-     * @returns The interpolated vector.
+     * @returns This vector after the interpolation.
      */
-    public static lerp(value1: ReadonlyVector4, value2: ReadonlyVector4, amount: number): Vector4 {
-        return new Vector4(
-            value1.x + (value2.x - value1.x) * amount,
-            value1.y + (value2.y - value1.y) * amount,
-            value1.z + (value2.z - value1.z) * amount,
-            value1.w + (value2.w - value1.w) * amount
-        );
+    public lerpVectors(value1: ReadonlyVector4, value2: ReadonlyVector4, amount: number): Vector4 {
+        this.x = value1.x + (value2.x - value1.x) * amount;
+        this.y = value1.y + (value2.y - value1.y) * amount;
+        this.z = value1.z + (value2.z - value1.z) * amount;
+        this.w = value1.w + (value2.w - value1.w) * amount;
+
+        return this;
+    }
+    
+    /**
+     * Set this vector to linearly interpolate between this vector and the other vector by amount.
+     * @param other The other source vector.
+     * @param amount Value between 0 and 1 indicating the weight of the second source vector.
+     * @returns This vector after the interpolation.
+     */
+    public lerp(other: ReadonlyVector4, amount: number): Vector4 {
+        this.x += (other.x - this.x) * amount;
+        this.y += (other.y - this.y) * amount;
+        this.z += (other.z - this.z) * amount;
+        this.w += (other.w - this.w) * amount;
+
+        return this;
     }
 
     /**
      * Transforms a vector2 by the given 4x4 matrix.
      * @param position The source vector.
      * @param matrix The transformation matrix.
-     * @returns The transformed vector.
+     * @returns This vector after the transformation.
      */
-    public static transformVector2From4x4Matrix(position: Immutable<Vector2>, matrix: Immutable<Matrix4x4>): Vector4 {
+    public transformVector2From4x4Matrix(position: Immutable<Vector2>, matrix: Immutable<Matrix4x4>): Vector4 {
         const m = Matrix4x4Reader.$fromTuple!(matrix.elements);
-        return new Vector4(
-            position.x * m.$m11!() + position.y * m.$m21!() + m.$m41!(),
-            position.x * m.$m12!() + position.y * m.$m22!() + m.$m42!(),
-            position.x * m.$m13!() + position.y * m.$m23!() + m.$m43!(),
-            position.x * m.$m14!() + position.y * m.$m24!() + m.$m44!()
-        );
+        const x = position.x;
+        const y = position.y;
+        this.x = x * m.$m11!() + y * m.$m21!() + m.$m41!();
+        this.y = x * m.$m12!() + y * m.$m22!() + m.$m42!();
+        this.z = x * m.$m13!() + y * m.$m23!() + m.$m43!();
+        this.w = x * m.$m14!() + y * m.$m24!() + m.$m44!();
+        
+        return this;
     }
 
     /**
      * Transforms a vector3 by the given 4x4 matrix.
      * @param position The source vector.
      * @param matrix The transformation matrix.
-     * @returns The transformed vector.
+     * @returns This vector after the transformation.
      */
-    public static transformVector3FromMatrix4x4(position: Immutable<Vector3>, matrix: Immutable<Matrix4x4>): Vector4 {
+    public transformVector3FromMatrix4x4(position: Immutable<Vector3>, matrix: Immutable<Matrix4x4>): Vector4 {
         const m = Matrix4x4Reader.$fromTuple!(matrix.elements);
-        return new Vector4(
-            position.x * m.$m11!() + position.y * m.$m21!() + position.z * m.$m31!() + m.$m41!(),
-            position.x * m.$m12!() + position.y * m.$m22!() + position.z * m.$m32!() + m.$m42!(),
-            position.x * m.$m13!() + position.y * m.$m23!() + position.z * m.$m33!() + m.$m43!(),
-            position.x * m.$m14!() + position.y * m.$m24!() + position.z * m.$m34!() + m.$m44!()
-        );
+        const x = position.x;
+        const y = position.y;
+        const z = position.z;
+        this.x = x * m.$m11!() + y * m.$m21!() + z * m.$m31!() + m.$m41!();
+        this.y = x * m.$m12!() + y * m.$m22!() + z * m.$m32!() + m.$m42!();
+        this.z = x * m.$m13!() + y * m.$m23!() + z * m.$m33!() + m.$m43!();
+        this.w = x * m.$m14!() + y * m.$m24!() + z * m.$m34!() + m.$m44!();
+
+        return this;
     }
     
     /**
-     * Transforms a vector4 by the given 4x4 matrix.
-     * @param vector The source vector.
+     * Transforms this vector by the given 4x4 matrix.
      * @param matrix The transformation matrix.
-     * @returns The transformed vector.
+     * @returns This vector after the transformation.
      */
-    public static transformFromMatrix4x4(vector: ReadonlyVector4, matrix: Immutable<Matrix4x4>): Vector4 {
+    public transformFromMatrix4x4(matrix: Immutable<Matrix4x4>): Vector4 {
         const m = Matrix4x4Reader.$fromTuple!(matrix.elements);
-        return new Vector4(
-            vector.x * m.$m11!() + vector.y * m.$m21!() + vector.z * m.$m31!() + vector.w * m.$m41!(),
-            vector.x * m.$m12!() + vector.y * m.$m22!() + vector.z * m.$m32!() + vector.w * m.$m42!(),
-            vector.x * m.$m13!() + vector.y * m.$m23!() + vector.z * m.$m33!() + vector.w * m.$m43!(),
-            vector.x * m.$m14!() + vector.y * m.$m24!() + vector.z * m.$m34!() + vector.w * m.$m44!()
-        );
+        const x = this.x;
+        const y = this.y;
+        const z = this.z;
+        const w = this.w;
+        this.x = x * m.$m11!() + y * m.$m21!() + z * m.$m31!() + w * m.$m41!();
+        this.y = x * m.$m12!() + y * m.$m22!() + z * m.$m32!() + w * m.$m42!();
+        this.z = x * m.$m13!() + y * m.$m23!() + z * m.$m33!() + w * m.$m43!();
+        this.w = x * m.$m14!() + y * m.$m24!() + z * m.$m34!() + w * m.$m44!();
+
+        return this;
     }
 
     /**
      * Transforms a vector2 by the given Quaternion rotation value.
      * @param value The source vector to be rotated.
      * @param rotation The rotation to apply.
-     * @returns The transformed vector.
+     * @returns This vector after the transformation.
      */
-    public static transformVector2FromQuaternion(value: Immutable<Vector2>, rotation: Immutable<Quaternion>): Vector4 {
+    public transformVector2FromQuaternion(value: Immutable<Vector2>, rotation: Immutable<Quaternion>): Vector4 {
         const x2 = rotation.x + rotation.x;
         const y2 = rotation.y + rotation.y;
         const z2 = rotation.z + rotation.z;
@@ -418,21 +500,21 @@ export class Vector4 implements ImmutConvertible<ReadonlyVector4> {
         const yz2 = rotation.y * z2;
         const zz2 = rotation.z * z2;
 
-        return new Vector4(
-            value.x * (1.0 - yy2 - zz2) + value.y * (xy2 - wz2),
-            value.x * (xy2 + wz2) + value.y * (1.0 - xx2 - zz2),
-            value.x * (xz2 - wy2) + value.y * (yz2 + wx2),
-            1.0
-        );
+        this.x = value.x * (1.0 - yy2 - zz2) + value.y * (xy2 - wz2);
+        this.y = value.x * (xy2 + wz2) + value.y * (1.0 - xx2 - zz2);
+        this.z = value.x * (xz2 - wy2) + value.y * (yz2 + wx2);
+        this.w = 1.0;
+
+        return this;
     }
 
     /**
      * Transforms a vector3 by the given Quaternion rotation value.
      * @param value The source vector to be rotated.
      * @param rotation The rotation to apply.
-     * @returns The transformed vector.
+     * @returns This vector after the transformation.
      */
-    public static transformVector3FromQuaternion(value: Immutable<Vector3>, rotation: Immutable<Quaternion>): Vector4 {
+    public transformVector3FromQuaternion(value: Immutable<Vector3>, rotation: Immutable<Quaternion>): Vector4 {
         const x2 = rotation.x + rotation.x;
         const y2 = rotation.y + rotation.y;
         const z2 = rotation.z + rotation.z;
@@ -447,21 +529,20 @@ export class Vector4 implements ImmutConvertible<ReadonlyVector4> {
         const yz2 = rotation.y * z2;
         const zz2 = rotation.z * z2;
 
-        return new Vector4(
-            value.x * (1.0 - yy2 - zz2) + value.y * (xy2 - wz2) + value.z * (xz2 + wy2),
-            value.x * (xy2 + wz2) + value.y * (1.0 - xx2 - zz2) + value.z * (yz2 - wx2),
-            value.x * (xz2 - wy2) + value.y * (yz2 + wx2) + value.z * (1.0 - xx2 - yy2),
-            1.0
-        );
+        this.x = value.x * (1.0 - yy2 - zz2) + value.y * (xy2 - wz2) + value.z * (xz2 + wy2);
+        this.y = value.x * (xy2 + wz2) + value.y * (1.0 - xx2 - zz2) + value.z * (yz2 - wx2);
+        this.z = value.x * (xz2 - wy2) + value.y * (yz2 + wx2) + value.z * (1.0 - xx2 - yy2);
+        this.w = 1.0;
+        
+        return this;
     }
 
     /**
-     * Transforms a vector4 by the given Quaternion rotation value.
-     * @param value The source vector to be rotated.
+     * Transforms this vector by the given Quaternion rotation value.
      * @param rotation The rotation to apply.
-     * @returns The transformed vector.
+     * @returns This vector after the transformation.
      */
-    public static transformFromQuaternion(value: ReadonlyVector4, rotation: Immutable<Quaternion>): Vector4 {
+    public transformFromQuaternion(rotation: Immutable<Quaternion>): Vector4 {
         const x2 = rotation.x + rotation.x;
         const y2 = rotation.y + rotation.y;
         const z2 = rotation.z + rotation.z;
@@ -476,141 +557,268 @@ export class Vector4 implements ImmutConvertible<ReadonlyVector4> {
         const yz2 = rotation.y * z2;
         const zz2 = rotation.z * z2;
 
-        return new Vector4(
-            value.x * (1.0 - yy2 - zz2) + value.y * (xy2 - wz2) + value.z * (xz2 + wy2),
-            value.x * (xy2 + wz2) + value.y * (1.0 - xx2 - zz2) + value.z * (yz2 - wx2),
-            value.x * (xz2 - wy2) + value.y * (yz2 + wx2) + value.z * (1.0 - xx2 - yy2),
-            value.w
-        );
+        const px = this.x;
+        const py = this.y;
+        const pz = this.z;
+
+        this.x = px * (1.0 - yy2 - zz2) + py * (xy2 - wz2) + pz * (xz2 + wy2);
+        this.y = px * (xy2 + wz2) + py * (1.0 - xx2 - zz2) + pz * (yz2 - wx2);
+        this.z = px * (xz2 - wy2) + py * (yz2 + wx2) + pz * (1.0 - xx2 - yy2);
+        //this.w = this.w;
+
+        return this;
     }
     
     /**
-     * Returns the dot product of two vectors.
-     * @param vector1 The first vector.
-     * @param vector2 The second vector.
+     * Returns the dot product of this vector and the other vector.
+     * @param other The other vector.
      * @returns The dot product.
      */
-    public static dot(vector1: ReadonlyVector4, vector2: ReadonlyVector4): number {
-        return vector1.x * vector2.x + vector1.y * vector2.y + vector1.z * vector2.z + vector1.w * vector2.w;
+    public dot(other: ReadonlyVector4): number {
+        return this.x * other.x + this.y * other.y + this.z * other.z + this.w * other.w;
     }
 
     /**
      * Returns a vector whose elements are the minimum of each of the pairs of elements in the two source vectors.
      * @param value1 The first source vector.
      * @param value2 The second source vector.
-     * @returns The minimized vector.
+     * @returns This vector after the min operation.
      */
-    public static min(value1: ReadonlyVector4, value2: ReadonlyVector4): Vector4 {
-        return new Vector4(
-            (value1.x < value2.x) ? value1.x : value2.x,
-            (value1.y < value2.y) ? value1.y : value2.y,
-            (value1.z < value2.z) ? value1.z : value2.z,
-            (value1.w < value2.w) ? value1.w : value2.w
-        );
+    public minVectors(value1: ReadonlyVector4, value2: ReadonlyVector4): Vector4 {
+        this.x = (value1.x < value2.x) ? value1.x : value2.x;
+        this.y = (value1.y < value2.y) ? value1.y : value2.y;
+        this.z = (value1.z < value2.z) ? value1.z : value2.z;
+        this.w = (value1.w < value2.w) ? value1.w : value2.w;
+
+        return this;
+    }
+
+    /**
+     * Returns a vector whose elements are the minimum of each of the pairs of elements in this vector and the other vector.
+     * @param other The other source vector.
+     * @returns This vector after the min operation.
+     */
+    public min(other: ReadonlyVector4): Vector4 {
+        this.x = (this.x < other.x) ? this.x : other.x;
+        this.y = (this.y < other.y) ? this.y : other.y;
+        this.z = (this.z < other.z) ? this.z : other.z;
+        this.w = (this.w < other.w) ? this.w : other.w;
+
+        return this;
     }
 
     /**
      * Returns a vector whose elements are the maximum of each of the pairs of elements in the two source vectors.
      * @param value1 The first source vector.
      * @param value2 The second source vector.
-     * @returns The maximized vector.
+     * @returns This vector after the max operation.
      */
-    public static max(value1: ReadonlyVector4, value2: ReadonlyVector4): Vector4 {
-        return new Vector4(
-            (value1.x > value2.x) ? value1.x : value2.x,
-            (value1.y > value2.y) ? value1.y : value2.y,
-            (value1.z > value2.z) ? value1.z : value2.z,
-            (value1.w > value2.w) ? value1.w : value2.w
-        );
-    }
+    public maxVectors(value1: ReadonlyVector4, value2: ReadonlyVector4): Vector4 {
+        this.x = (value1.x > value2.x) ? value1.x : value2.x;
+        this.y = (value1.y > value2.y) ? value1.y : value2.y;
+        this.z = (value1.z > value2.z) ? value1.z : value2.z;
+        this.w = (value1.w > value2.w) ? value1.w : value2.w;
 
-    /**
-     * Returns a vector whose elements are the absolute values of each of the source vector's elements.
-     * @param value The source vector.
-     * @returns The absolute value vector.
-     */
-    public static abs(value: ReadonlyVector4): Vector4 {
-        return new Vector4(Math.abs(value.x), Math.abs(value.y), Math.abs(value.z), Math.abs(value.w));
+        return this;
     }
     
     /**
-     * Returns a vector whose elements are the square root of each of the source vector's elements.
-     * @param value The source vector.
-     * @returns The square root vector.
+     * Returns a vector whose elements are the maximum of each of the pairs of elements in this vector and the other vector.
+     * @param other The other source vector.
+     * @returns This vector after max operation.
      */
-    public static sqrt(value: ReadonlyVector4): Vector4 {
-        return new Vector4(Math.sqrt(value.x), Math.sqrt(value.y), Math.sqrt(value.z), Math.sqrt(value.w));
+    public max(other: ReadonlyVector4): Vector4 {
+        this.x = (this.x > other.x) ? this.x : other.x;
+        this.y = (this.y > other.y) ? this.y : other.y;
+        this.z = (this.z > other.z) ? this.z : other.z;
+        this.w = (this.w > other.w) ? this.w : other.w;
+
+        return this;
+    }
+
+    /**
+     * Returns a vector whose elements are the absolute values of this vector's elements.
+     * @returns This vector after the absolute operation.
+     */
+    public abs(): Vector4 {
+        this.x = Math.abs(this.x);
+        this.y = Math.abs(this.y);
+        this.z = Math.abs(this.z);
+        this.w = Math.abs(this.w);
+
+        return this;
+    }
+    
+    /**
+     * Returns a vector whose elements are the square root of each of this vector's elements.
+     * @returns This vector after the square root operation.
+     */
+    public sqrt(): Vector4 {
+        this.x = Math.sqrt(this.x);
+        this.y = Math.sqrt(this.y);
+        this.z = Math.sqrt(this.z);
+        this.w = Math.sqrt(this.w);
+
+        return this;
     }
     
     /**
      * Adds two vectors together.
      * @param left The first source vector.
      * @param right The second source vector.
-     * @returns The summed vector.
+     * @returns This vector after the addition operation.
      */
-    public static add(left: ReadonlyVector4, right: ReadonlyVector4): Vector4 {
-        return new Vector4(left.x + right.x, left.y + right.y, left.z + right.z, left.w + right.w);
+    public addVectors(left: ReadonlyVector4, right: ReadonlyVector4): Vector4 {
+        this.x = left.x + right.x;
+        this.y = left.y + right.y;
+        this.z = left.z + right.z;
+        this.w = left.w + right.w;
+
+        return this;
+    }
+    
+    /**
+     * Adds the given vector to this vector.
+     * @param other The other vector.
+     * @returns This vector after the addition operation.
+     */
+    public add(other: ReadonlyVector4): Vector4 {
+        this.x += other.x;
+        this.y += other.y;
+        this.z += other.z;
+        this.w += other.w;
+
+        return this;
     }
 
     /**
      * Subtracts the second vector from the first.
      * @param left The first source vector.
      * @param right The second source vector.
-     * @returns The difference vector.
+     * @returns This vector after the subtraction operation.
      */
-    public static sub(left: ReadonlyVector4, right: ReadonlyVector4): Vector4 {
-        return new Vector4(left.x - right.x, left.y - right.y, left.z - right.z, left.w - right.w);
+    public subVectors(left: ReadonlyVector4, right: ReadonlyVector4): Vector4 {
+        this.x = left.x - right.x;
+        this.y = left.y - right.y;
+        this.z = left.z - right.z;
+        this.w = left.w - right.w;
+
+        return this;
+    }
+    
+    /**
+     * Subtracts the given vector from this vector.
+     * @param other The other vector.
+     * @returns This vector after the subtraction operation.
+     */
+    public sub(other: ReadonlyVector4): Vector4 {
+        this.x -= other.x;
+        this.y -= other.y;
+        this.z -= other.z;
+        this.w -= other.w;
+
+        return this;
     }
 
     /**
      * Multiplies two vectors together.
      * @param left The first source vector.
      * @param right The second source vector.
-     * @returns The product vector.
+     * @returns This vector after the multiplication operation.
      */
-    public static mul(left: ReadonlyVector4, right: ReadonlyVector4): Vector4 {
-        return new Vector4(left.x * right.x, left.y * right.y, left.z * right.z, left.w * right.w);
+    public mulVectors(left: ReadonlyVector4, right: ReadonlyVector4): Vector4 {
+        this.x = left.x * right.x;
+        this.y = left.y * right.y;
+        this.z = left.z * right.z;
+        this.w = left.w * right.w;
+
+        return this;
     }
     
     /**
-     * Multiplies a vector by the given scalar.
-     * @param left The source vector.
-     * @param right The scalar value.
-     * @returns The scaled vector.
+     * Multiplies this vector by the given vector.
+     * @param other The other vector.
+     * @returns This vector after the multiplication operation.
      */
-    public static mulScalar(left: ReadonlyVector4, right: number): Vector4 {
-        return new Vector4(left.x * right, left.y * right, left.z * right, left.w * right);
+    public mul(other: ReadonlyVector4): Vector4 {
+        this.x *= other.x;
+        this.y *= other.y;
+        this.z *= other.z;
+        this.w *= other.w;
+
+        return this;
+    }
+    
+    /**
+     * Multiplies this vector by the given scalar.
+     * @param other The scalar value.
+     * @returns This vector after the multiplication operation.
+     */
+    public mulScalar(other: number): Vector4 {
+        this.x *= other;
+        this.y *= other;
+        this.z *= other;
+        this.w *= other;
+
+        return this;
     }
 
     /**
      * Divides the first vector by the second.
      * @param left The first source vector.
      * @param right The second source vector.
-     * @returns The vector resulting from the division.
+     * @returns This vector after the division operation.
      */
-    public static div(left: ReadonlyVector4, right: ReadonlyVector4): Vector4 {
-        return new Vector4(left.x / right.x, left.y / right.y, left.z / right.z, left.w / right.w);
+    public divVectors(left: ReadonlyVector4, right: ReadonlyVector4): Vector4 {
+        this.x = left.x / right.x;
+        this.y = left.y / right.y;
+        this.z = left.z / right.z;
+        this.w = left.w / right.w;
+
+        return this;
+    }
+
+    /**
+     * Divides this vector by the given vector.
+     * @param other The other vector.
+     * @returns This vector after the division operation.
+     */
+    public div(other: ReadonlyVector4): Vector4 {
+        this.x /= other.x;
+        this.y /= other.y;
+        this.z /= other.z;
+        this.w /= other.w;
+
+        return this;
     }
     
     /**
-     * Divides the vector by the given scalar.
-     * @param left The source vector.
-     * @param divisor The scalar value.
-     * @returns The result of the division.
+     * Divides this vector by the given scalar.
+     * @param other The scalar value.
+     * @returns This vector after the division operation.
      */
-    public static divScalar(left: ReadonlyVector4, divisor: number): Vector4 {
+    public divScalar(divisor: number): Vector4 {
         const invDiv = 1.0 / divisor;
 
-        return new Vector4(left.x * invDiv, left.y * invDiv, left.z * invDiv, left.w * invDiv);
+        this.x *= invDiv;
+        this.y *= invDiv;
+        this.z *= invDiv;
+        this.w *= invDiv;
+
+        return this;
     }
     
     /**
-     * Negates a given vector.
-     * @param value The source vector.
-     * @returns The negated vector.
+     * Negates this vector.
+     * @returns This vector after the negation operation.
      */
-    public static negate(value: ReadonlyVector4): Vector4 {
-        return new Vector4(-value.x, -value.y, -value.z, -value.w);
+    public negate(): Vector4 {
+        this.x = -this.x;
+        this.y = -this.y;
+        this.z = -this.z;
+        this.w = -this.w;
+
+        return this;
     }
 
     // #endregion
