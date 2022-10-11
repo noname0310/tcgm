@@ -1,10 +1,10 @@
-import { Matrix4x4 } from "./Matrix4x4";
+import type { Matrix4x4 } from "./Matrix4x4";
 import { Matrix4x4Reader } from "./Matrix4x4.internalmacro";
-import { Quaternion } from "./Quaternion";
-import { Immutable, ImmutConvertible } from "./types/Immutable";
-import { Vector2 } from "./Vector2";
-import { Vector3 } from "./Vector3";
-import { XYZW } from "./VectorLike";
+import type { Quaternion } from "./Quaternion";
+import type { Immutable, ImmutConvertible } from "./types/Immutable";
+import type { Vector2 } from "./Vector2";
+import type { Vector3 } from "./Vector3";
+import type { XYZW } from "./VectorLike";
 
 /**
  * readonly 4D vector.

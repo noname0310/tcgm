@@ -1,4 +1,4 @@
-import { Matrix3x2Tuple } from "./Matrix3x2";
+import type { Matrix3x2Tuple } from "./Matrix3x2";
 
 export interface Matrix3x2Reader {
     type: "Matrix3x2Reader";

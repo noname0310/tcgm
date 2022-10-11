@@ -1,4 +1,4 @@
-import { Matrix4x4Tuple } from "./Matrix4x4";
+import type { Matrix4x4Tuple } from "./Matrix4x4";
 
 export interface Matrix4x4Reader {
     type: "Matrix4x4Reader";

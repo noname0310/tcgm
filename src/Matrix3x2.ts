@@ -1,4 +1,4 @@
-import { ImmutConvertible } from "./types/Immutable";
+import type { ImmutConvertible } from "./types/Immutable";
 
 export type Matrix3x2Tuple = [
     number, number, number,

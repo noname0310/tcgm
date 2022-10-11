@@ -9,14 +9,21 @@
     ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
-        "ecmaVersion": 13,
+        "ecmaVersion": "latest",
         "sourceType": "module",
         "project": "./tsconfig.json"
     },
     "plugins": [
-        "@typescript-eslint"
+        "@typescript-eslint",
+        "simple-import-sort"
     ],
     "rules": {
+        "@typescript-eslint/consistent-type-imports": [
+            "error",
+            {
+                "prefer": "type-imports"
+            }
+        ],
         "@typescript-eslint/no-non-null-assertion": "off",
         "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/no-unused-vars": "off",
@@ -101,7 +108,17 @@
                 "format": ["PascalCase"]
             }
         ],
-        "no-debugger": "warn",
+        "comma-dangle": [
+            "error",
+            "never"
+        ],
+        "comma-spacing": [
+            "error"
+        ],
+        "eol-last": [
+            "error",
+            "always"
+        ],
         "indent": [
             "error",
             4
@@ -110,6 +127,7 @@
             "error",
             "unix"
         ],
+        "no-debugger": "warn",
         "quotes": [
             "error",
             "double"
@@ -118,9 +136,7 @@
             "error",
             "always"
         ],
-        "comma-dangle": [
-            "error",
-            "never"
-        ]
+        "simple-import-sort/imports": "error",
+        "simple-import-sort/exports": "error"
     }
 }
