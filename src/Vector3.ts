@@ -157,7 +157,7 @@ export class Vector3 implements ImmutConvertible<ReadonlyVector3> {
     // #region Public Instance Methods
 
     /**
-     * freezes the vector and returns it.
+     * Freezes the vector and returns it.
      */
     public freeze(): ReadonlyVector3 {
         return Object.freeze(this);
